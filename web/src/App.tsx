@@ -1,5 +1,5 @@
 import React from "react";
-import Topbar from "./Components/Topbar";
+import Topbar from "./components/Topbar";
 import { SnackbarProvider } from "notistack";
 
 const App = () => {
