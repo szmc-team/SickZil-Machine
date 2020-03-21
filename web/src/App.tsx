@@ -1,11 +1,13 @@
 import React from "react";
+import Topbar from "./Components/Topbar";
+import { SnackbarProvider } from "notistack";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <span>Hello, World!</span>
-    </div>
+    <SnackbarProvider>
+      <Topbar />
+    </SnackbarProvider>
   );
-}
+};
 
 export default App;
