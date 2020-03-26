@@ -1,13 +1,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import Menu from './components/menu'
 
-const ActivityBar: React.FC = () => {
-  return (
-    <div css={styles.activityBar}>
-      <Menu />
-    </div>
-  )
+const Explorer: React.FC = () => {
+  return <div css={styles.activityBar}></div>
 }
 
 const styles = {
@@ -18,4 +13,4 @@ const styles = {
   `,
 }
 
-export default ActivityBar
+export default Explorer
