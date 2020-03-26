@@ -1,6 +1,6 @@
 module.exports = {
   webpack: function(config, env) {
-    config.target = "web";
-    return config;
-  }
-};
+    config.target = 'web'
+    return config
+  },
+}

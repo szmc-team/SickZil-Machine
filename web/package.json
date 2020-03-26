@@ -15,13 +15,14 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "cross-env": "^7.0.2",
+    "normalize.css": "^8.0.1",
     "notistack": "^0.9.9",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.0",
     "rxjs": "^6.5.4",
     "typeface-roboto": "^0.0.75",
-    "typescript": "~3.7.2"
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -47,7 +48,11 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "@typescript-eslint/typescript-estree": "^2.25.0",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
