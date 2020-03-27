@@ -2,6 +2,13 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+  moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
+  testEnvironment: 'node',
+  testPathIgnorePatterns: ['\\\\node_modules\\\\'],
+  transform: {
+    '^.+\\.(js|jsx)?$': 'babel-jest',
+  },
+  preset: 'ts-jest',
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
