@@ -37,7 +37,8 @@
     "test": "jest",
     "eject": "react-app-rewired eject",
     "precommit": "lint-staged",
-    "prepush": "yarn test"
+    "prepush": "yarn test",
+    "type": "npx tsc --noEmit"
   },
   "eslintConfig": {
     "extends": "react-app"
