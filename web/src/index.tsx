@@ -6,16 +6,23 @@ import App from './features/app'
 import * as serviceWorker from './serviceWorker'
 import 'typeface-roboto'
 import { GlobalStyle, ThemeProvider } from './styles'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import rootReducer from './stores/configureStores'
+
+const store = createStore(rootReducer)
 
 const Root: React.FC = () => (
-  <MemoryRouter>
-    <SnackbarProvider>
-      <ThemeProvider>
-        <GlobalStyle />
-        <App />
-      </ThemeProvider>
-    </SnackbarProvider>
-  </MemoryRouter>
+  <Provider store={store}>
+    <MemoryRouter>
+      <SnackbarProvider>
+        <ThemeProvider>
+          <GlobalStyle />
+          <App />
+        </ThemeProvider>
+      </SnackbarProvider>
+    </MemoryRouter>
+  </Provider>
 )
 
 ReactDOM.render(<Root />, document.getElementById('root'))
