@@ -7,6 +7,8 @@ import {
   useFileQuery,
 } from '../../../../graphql'
 import { useState, useEffect } from 'react'
+import ImageList from './ImageList'
+import ImageListItem from './ImageListItem'
 
 const Explorer: React.FC = () => {
   const [createFileMutation] = useCreateFileMutation()
@@ -50,38 +52,26 @@ const Explorer: React.FC = () => {
           })
         }}
       />
-      <ul
-        css={css`
-          display: flex;
-          flex-direction: column;
-          padding: 0;
-          margin: 0;
-          list-style-type: none;
-        `}
-      >
+      <ImageList>
         {Array.from({ length: 12 })
           .map((_, idx) => ({
             id: idx,
             value: hacker.abbreviation(),
           }))
           .map(({ id, value }) => (
-            <li
-              key={id}
-              css={css`
-                padding: 6px 12px;
-              `}
-            >
-              {value}
-            </li>
+            <ImageListItem key={id} name={value} img={img} />
           ))}
-      </ul>
+      </ImageList>
     </div>
   )
 }
 
 const styles = {
   activityBar: css`
+    display: flex;
+    flex-direction: column;
     width: 240px;
+    height: 100%;
     background-color: var(--bg-color);
     color: var(--text-color);
   `,
