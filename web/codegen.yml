@@ -3,6 +3,7 @@ schema: src/graphql/schema/*.graphql
 documents:
   - src/graphql/query/*.graphql
   - src/graphql/mutation/*.graphql
+  - src/graphql/subscription/*.graphql
   - src/graphql/fragment/*.graphql
 generates:
   src/graphql/operations.ts:

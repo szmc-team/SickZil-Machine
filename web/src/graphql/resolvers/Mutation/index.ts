@@ -1,10 +1,12 @@
 import { MutationCreateFileArgs } from '../../operations'
-import { ref } from '../ref'
-export function createFile(
-  _: void,
-  { input: { file } }: MutationCreateFileArgs
-) {
-  ref.file = file
+import { ResolverContext } from '../../types'
 
-  return 'key'
+export async function createFile(
+  _: void,
+  { input: { file } }: MutationCreateFileArgs,
+  { fileManager }: ResolverContext
+) {
+  await fileManager.saveFile(file, '1.file')
+
+  return ''
 }

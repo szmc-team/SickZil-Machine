@@ -3,13 +3,19 @@ import { FileManager } from './FileManager'
 window.requestFileSystem =
   window.requestFileSystem ?? window.webkitRequestFileSystem
 
-export async function configureFileSystem(diskSize: number) {
+export async function configureFileManager(diskSize: number) {
   await new Promise<number>((res, rej) =>
     navigator.webkitPersistentStorage.requestQuota(diskSize, res, rej)
   )
-  const fileSystem = await new Promise<FileSystem>((res, rej) =>
-    window.requestFileSystem(window.PERSISTENT, 1024 * 1024 * 1024, res, rej)
-  )
 
-  return new FileManager(fileSystem)
+  const db = await new Promise<IDBDatabase>((res, rej) => {
+    const request = indexedDB.open('hellox', 4)
+    request.onupgradeneeded = e => {
+      request.result.createObjectStore('img')
+    }
+    request.onerror = () => rej()
+    request.onsuccess = () => res(request.result)
+  })
+
+  return new FileManager(db)
 }

@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react'
 
 const Explorer: React.FC = () => {
   const [createFileMutation] = useCreateFileMutation()
-  const { data } = useFileQuery()
+  const { data } = useFileQuery({ variables: { id: '111' } })
   const [img, setImg] = useState('')
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Explorer: React.FC = () => {
           if (!file) return
           await createFileMutation({
             variables: { input: { file } },
-            refetchQueries: [{ query: FileDocument }],
+            refetchQueries: [{ query: FileDocument, variables: { id: '111' } }],
             awaitRefetchQueries: true,
           })
         }}
