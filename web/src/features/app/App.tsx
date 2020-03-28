@@ -4,11 +4,13 @@ import ActivityBar from '../activity-bar'
 import Editor from '../editor'
 import StatusBar from '../status-bar'
 import ToolBar from '../tool-bar'
+import MenuBar from '../menu-bar'
 
 const App: React.FC = () => {
   return (
     <div css={styles.wrapper}>
       <div css={styles.app}>
+        <MenuBar />
         <ToolBar />
         <div css={styles.row}>
           <Editor />
