@@ -3,25 +3,33 @@ import { jsx, css } from '@emotion/core'
 import ActivityBar from '../activity-bar'
 import Editor from '../editor'
 import StatusBar from '../status-bar'
+import ToolBar from '../tool-bar'
 
 const App: React.FC = () => {
   return (
-    <div css={styles.app}>
-      <div css={styles.row}>
-        <div css={styles.activityBarWrapper}>
-          <ActivityBar />
+    <div css={styles.wrapper}>
+      <div css={styles.app}>
+        <ToolBar />
+        <div css={styles.row}>
+          <Editor />
+          <div css={styles.activityBarWrapper}>
+            <ActivityBar />
+          </div>
         </div>
-        <Editor />
+        <StatusBar />
       </div>
-      <StatusBar />
     </div>
   )
 }
 
 const styles = {
-  app: css`
+  wrapper: css`
     width: 100vw;
     height: 100vh;
+  `,
+  app: css`
+    width: 100%;
+    height: 100%;
     color: var(--text-color);
     background-color: var(--bg-color);
     display: flex;
@@ -35,6 +43,7 @@ const styles = {
     display: flex;
     flex-direction: row;
     height: 100%;
+    overflow: hidden;
   `,
 }
 export default App

@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import Menu from './components/menu'
+import Explorer from './components/explorer'
 
 const ActivityBar: React.FC = () => {
   return (
     <div css={styles.activityBar}>
-      <Menu />
+      <Explorer />
     </div>
   )
 }
