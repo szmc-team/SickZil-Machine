@@ -1,4 +1,5 @@
-import React from 'react'
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
@@ -9,7 +10,7 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined'
 import { useSnackbar } from 'notistack'
 
-const Topbar: React.FC = () => {
+const ToolBar: React.FC = () => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -63,4 +64,4 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default Topbar
+export default ToolBar
