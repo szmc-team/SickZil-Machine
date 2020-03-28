@@ -1,10 +1,55 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import { hacker } from 'faker'
+import {
+  useCreateFileMutation,
+  FileDocument,
+  useFileQuery,
+} from '../../../../graphql'
+import { useState, useEffect } from 'react'
 
 const Explorer: React.FC = () => {
+  const [createFileMutation] = useCreateFileMutation()
+  const { data } = useFileQuery()
+  const [img, setImg] = useState('')
+
+  useEffect(() => {
+    const file = data?.file
+    if (!file) return
+
+    const fileReader = new FileReader()
+
+    fileReader.addEventListener('load', event => {
+      const img = event.target?.result
+      if (typeof img === 'string') setImg(img)
+    })
+
+    fileReader.readAsDataURL(file)
+  }, [data])
+
   return (
     <div css={styles.activityBar}>
+      <img
+        src={img}
+        css={css`
+          width: 160px;
+          height: 160px;
+          object-fit: contain;
+        `}
+      />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={async e => {
+          const file = e.target.files?.[0]
+          if (!file) return
+          await createFileMutation({
+            variables: { input: { file } },
+            refetchQueries: [{ query: FileDocument }],
+            awaitRefetchQueries: true,
+          })
+        }}
+      />
       <ul
         css={css`
           display: flex;

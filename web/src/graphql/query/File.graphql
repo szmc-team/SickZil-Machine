@@ -1,0 +1,3 @@
+query file($id: ID!) {
+  file(id: $id) @client
+}

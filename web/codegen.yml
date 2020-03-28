@@ -17,6 +17,8 @@ generates:
       withHooks: true
       reactApolloVersion: 3
       avoidOptionals: true
+      scalars:
+        File: File
 hooks:
   afterAllFileWrite:
     - prettier --write

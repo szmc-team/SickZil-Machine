@@ -1,11 +1,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import Explorer from './components/explorer'
-import { useHelloQuery } from '../../graphql'
 
 const ActivityBar: React.FC = () => {
-  const { data } = useHelloQuery()
-
   return (
     <div css={styles.activityBar}>
       <Explorer />

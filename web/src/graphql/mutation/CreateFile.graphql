@@ -1,0 +1,3 @@
+mutation createFile($input: CreateFileInput!) {
+  createFile(input: $input) @client
+}
