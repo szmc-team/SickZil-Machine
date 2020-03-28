@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import Menu from './components/menu'
 import Explorer from './components/explorer'
 
 const ActivityBar: React.FC = () => {
@@ -14,6 +13,7 @@ const ActivityBar: React.FC = () => {
 const styles = {
   activityBar: css`
     width: 240px;
+    height: 100%;
     background-color: var(--bg-color);
     color: var(--text-color);
   `,

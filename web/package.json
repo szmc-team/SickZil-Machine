@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.0.0-beta.41",
     "@emotion/core": "^10.0.28",
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
@@ -17,8 +18,12 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.3",
+    "@types/uuid": "^7.0.2",
     "cross-env": "^7.0.2",
     "faker": "^4.1.0",
+    "graphql": "^14.6.0",
+    "graphql-tag": "^2.10.3",
+    "localforage": "^1.7.3",
     "normalize.css": "^8.0.1",
     "notistack": "^0.9.9",
     "react": "^16.13.1",
@@ -29,7 +34,8 @@
     "react-scripts": "3.4.0",
     "rxjs": "^6.5.4",
     "typeface-roboto": "^0.0.75",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "uuid": "^7.0.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -38,7 +44,8 @@
     "eject": "react-app-rewired eject",
     "precommit": "lint-staged",
     "prepush": "yarn test",
-    "type": "npx tsc --noEmit"
+    "type": "npx tsc --noEmit",
+    "graphql": "graphql-codegen"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,6 +66,12 @@
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
+    "@graphql-codegen/add": "^1.13.1",
+    "@graphql-codegen/cli": "^1.13.1",
+    "@graphql-codegen/fragment-matcher": "^1.13.1",
+    "@graphql-codegen/typescript": "^1.13.1",
+    "@graphql-codegen/typescript-operations": "^1.13.1",
+    "@graphql-codegen/typescript-react-apollo": "^1.13.1",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "@typescript-eslint/typescript-estree": "^2.25.0",
