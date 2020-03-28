@@ -1,0 +1,22 @@
+overwrite: true
+schema: src/graphql/schema/*.graphql
+documents:
+  - src/graphql/query/*.graphql
+  - src/graphql/mutation/*.graphql
+  - src/graphql/fragment/*.graphql
+generates:
+  src/graphql/operations.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - fragment-matcher
+    config:
+      withComponent: false
+      withHOC: false
+      withHooks: true
+      reactApolloVersion: 3
+      avoidOptionals: true
+hooks:
+  afterAllFileWrite:
+    - prettier --write
