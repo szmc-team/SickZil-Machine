@@ -6,6 +6,7 @@ export async function file(
   { id }: QueryFileArgs,
   { fileManager }: ResolverContext
 ) {
-  const file = await fileManager.readFile('1.file')
+  const _id = 'I love you'
+  const file = await fileManager.readFile(_id)
   return file && new Blob([file])
 }
