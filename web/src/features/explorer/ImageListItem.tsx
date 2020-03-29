@@ -14,14 +14,16 @@ const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
   return (
     <li css={styles.item}>
       <img src={img} css={styles.img} />
-      <span css={styles.name}>{name}</span>
-      <button
-        onClick={() => {
-          deleteFileEntry({ variables: { input: { id } } })
-        }}
-      >
-        DELETE
-      </button>
+      <div>
+        <span css={styles.name}>{name}</span>
+        <button
+          onClick={() => {
+            deleteFileEntry({ variables: { input: { id } } })
+          }}
+        >
+          DELETE
+        </button>
+      </div>
     </li>
   )
 }
@@ -33,11 +35,11 @@ const styles = {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    border: 1px solid black;
+
     margin: 6px 0;
     transition: background-color 100ms ease;
     &:hover {
-      background-color: gray;
+      background-color: rgb(32, 32, 32);
     }
   `,
   img: css`
@@ -49,7 +51,7 @@ const styles = {
   name: css`
     margin-top: 6px;
     margin-left: 12px;
-    font-size: 10px;
+    font-size: 12px;
   `,
 }
 

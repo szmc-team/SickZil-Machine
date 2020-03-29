@@ -1,20 +1,12 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core'
-import {
-  useCreateFileEntryMutation,
-  useFileEntriesQuery,
-  FileEntriesDocument,
-} from '~/graphql'
 import { useState, useEffect } from 'react'
+import { jsx, css } from '@emotion/core'
+import { useFileEntriesQuery } from '~/graphql'
 import ImageList from './ImageList'
 import ImageListItem from './ImageListItem'
 import { FilePreview } from './types'
 
 const Explorer: React.FC = () => {
-  const [createFileEntryMutation] = useCreateFileEntryMutation({
-    refetchQueries: [{ query: FileEntriesDocument }],
-    awaitRefetchQueries: true,
-  })
   const { data: fileEntriesData } = useFileEntriesQuery()
   const fileEntries = fileEntriesData?.fileEntries
 
@@ -38,16 +30,7 @@ const Explorer: React.FC = () => {
   }, [fileEntries])
 
   return (
-    <div css={styles.activityBar}>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={async e => {
-          const file = e.target.files?.[0]
-          if (!file) return
-          await createFileEntryMutation({ variables: { input: { file } } })
-        }}
-      />
+    <div css={styles.explorer}>
       <ImageList>
         {items.map(({ id, name, img }) => (
           <ImageListItem key={id} id={id} name={name} img={img} />
@@ -58,13 +41,13 @@ const Explorer: React.FC = () => {
 }
 
 const styles = {
-  activityBar: css`
+  explorer: css`
     display: flex;
     flex-direction: column;
+    background-color: rgb(56, 56, 56);
+    color: white;
     width: 240px;
     height: 100%;
-    background-color: var(--bg-color);
-    color: var(--text-color);
   `,
 }
 
