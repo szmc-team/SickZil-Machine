@@ -17,6 +17,10 @@ export type CreateFileEntryInput = {
   file: Scalars['File']
 }
 
+export type DeleteFileEntryInput = {
+  id: Scalars['ID']
+}
+
 export type FileEntry = {
   __typename?: 'FileEntry'
   id: Scalars['ID']
@@ -27,10 +31,15 @@ export type FileEntry = {
 export type Mutation = {
   __typename?: 'Mutation'
   createFileEntry: Scalars['ID']
+  deleteFileEntry: Scalars['Boolean']
 }
 
 export type MutationCreateFileEntryArgs = {
   input: CreateFileEntryInput
+}
+
+export type MutationDeleteFileEntryArgs = {
+  input: DeleteFileEntryInput
 }
 
 export type Query = {
@@ -50,6 +59,15 @@ export type CreateFileEntryMutationVariables = {
 export type CreateFileEntryMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
   'createFileEntry'
+>
+
+export type DeleteFileEntryMutationVariables = {
+  input: DeleteFileEntryInput
+}
+
+export type DeleteFileEntryMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteFileEntry'
 >
 
 export type FileEntriesQueryVariables = {}
@@ -117,6 +135,54 @@ export type CreateFileEntryMutationResult = ApolloReactCommon.MutationResult<
 export type CreateFileEntryMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateFileEntryMutation,
   CreateFileEntryMutationVariables
+>
+export const DeleteFileEntryDocument = gql`
+  mutation deleteFileEntry($input: DeleteFileEntryInput!) {
+    deleteFileEntry(input: $input) @client
+  }
+`
+export type DeleteFileEntryMutationFn = ApolloReactCommon.MutationFunction<
+  DeleteFileEntryMutation,
+  DeleteFileEntryMutationVariables
+>
+
+/**
+ * __useDeleteFileEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteFileEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFileEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFileEntryMutation, { data, loading, error }] = useDeleteFileEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteFileEntryMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteFileEntryMutation,
+    DeleteFileEntryMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    DeleteFileEntryMutation,
+    DeleteFileEntryMutationVariables
+  >(DeleteFileEntryDocument, baseOptions)
+}
+export type DeleteFileEntryMutationHookResult = ReturnType<
+  typeof useDeleteFileEntryMutation
+>
+export type DeleteFileEntryMutationResult = ApolloReactCommon.MutationResult<
+  DeleteFileEntryMutation
+>
+export type DeleteFileEntryMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteFileEntryMutation,
+  DeleteFileEntryMutationVariables
 >
 export const FileEntriesDocument = gql`
   query fileEntries {

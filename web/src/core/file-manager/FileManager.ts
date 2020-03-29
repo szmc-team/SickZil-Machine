@@ -41,14 +41,11 @@ export class FileManager {
     }))
   }
 
-  // async saveFile(file: File, name: string) {
-  //   const arrayBuffer = await blobToArrayBuffer(file)
-  //   await this.blobStorage.setItem(name, arrayBuffer)
-  // }
-
-  // async readFile(name: string) {
-  //   return this.blobStorage.getItem<ArrayBuffer>(name).catch(() => null)
-  // }
+  async delete(id: string) {
+    await this.blobStorage.removeItem(id)
+    await this.metaStorage.removeItem(id)
+    return id
+  }
 
   private blobStorage = localforage.createInstance({
     name: 'blob',

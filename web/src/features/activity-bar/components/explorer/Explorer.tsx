@@ -11,7 +11,10 @@ import ImageListItem from './ImageListItem'
 import { FilePreview } from './types'
 
 const Explorer: React.FC = () => {
-  const [createFileEntryMutation] = useCreateFileEntryMutation()
+  const [createFileEntryMutation] = useCreateFileEntryMutation({
+    refetchQueries: [{ query: FileEntriesDocument }],
+    awaitRefetchQueries: true,
+  })
   const { data: fileEntriesData } = useFileEntriesQuery()
   const fileEntries = fileEntriesData?.fileEntries
 
@@ -42,11 +45,7 @@ const Explorer: React.FC = () => {
         onChange={async e => {
           const file = e.target.files?.[0]
           if (!file) return
-          await createFileEntryMutation({
-            variables: { input: { file } },
-            refetchQueries: [{ query: FileEntriesDocument }],
-            awaitRefetchQueries: true,
-          })
+          await createFileEntryMutation({ variables: { input: { file } } })
         }}
       />
       <ImageList>

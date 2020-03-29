@@ -1,4 +1,8 @@
-import { MutationCreateFileEntryArgs, ResolverContext } from '~/graphql'
+import {
+  MutationCreateFileEntryArgs,
+  MutationDeleteFileEntryArgs,
+  ResolverContext,
+} from '~/graphql'
 
 export async function createFileEntry(
   _: void,
@@ -7,4 +11,13 @@ export async function createFileEntry(
 ) {
   const id = await fileManager.create(file)
   return id
+}
+
+export async function deleteFileEntry(
+  _: void,
+  { input: { id } }: MutationDeleteFileEntryArgs,
+  { fileManager }: ResolverContext
+) {
+  await fileManager.delete(id)
+  return true
 }

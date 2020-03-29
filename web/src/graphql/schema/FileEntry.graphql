@@ -8,6 +8,7 @@ extend type Query {
 
 extend type Mutation {
   createFileEntry(input: CreateFileEntryInput!): ID!
+  deleteFileEntry(input: DeleteFileEntryInput!): Boolean!
 }
 
 type FileEntry {
@@ -18,4 +19,8 @@ type FileEntry {
 
 input CreateFileEntryInput {
   file: File!
+}
+
+input DeleteFileEntryInput {
+  id: ID!
 }
