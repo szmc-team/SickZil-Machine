@@ -40,8 +40,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "codecov": "./node_modules/.bin/codecov --token='79132b75-bb78-4c70-83d9-ecf1f5aee69a'",
-    "test": "jest && yarn codecov",
+    "test": "jest",
     "eject": "react-app-rewired eject",
     "precommit": "lint-staged",
     "prepush": "yarn test",
