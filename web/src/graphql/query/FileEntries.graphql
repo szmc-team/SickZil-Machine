@@ -1,0 +1,7 @@
+query fileEntries {
+  fileEntries @client {
+    id
+    name
+    blob
+  }
+}

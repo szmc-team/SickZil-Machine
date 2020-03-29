@@ -6,5 +6,6 @@ export function configureClient() {
   const fileManager = configureFileManager()
   const resolvers = configureResolvers({ fileManager })
   const cache = new InMemoryCache()
+
   return new ApolloClient({ cache, resolvers })
 }
