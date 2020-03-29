@@ -41,12 +41,8 @@ jobs:
       - name: Build
         run: yarn build
         working-directory: ./web
-      
-      - name: Upload coverage to Codecov  
+
+      - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./web/coverage/clover.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: true
