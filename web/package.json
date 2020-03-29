@@ -40,7 +40,8 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "jest",
+    "codecov": "./node_modules/.bin/codecov --token='79132b75-bb78-4c70-83d9-ecf1f5aee69a'",
+    "test": "jest && yarn codecov",
     "eject": "react-app-rewired eject",
     "precommit": "lint-staged",
     "prepush": "yarn test",
@@ -76,6 +77,7 @@
     "@typescript-eslint/parser": "^2.25.0",
     "@typescript-eslint/typescript-estree": "^2.25.0",
     "babel-jest": "^24.9.0",
+    "codecov": "^3.6.5",
     "customize-cra": "^0.9.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",

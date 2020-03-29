@@ -1,11 +1,13 @@
-const { useBabelRc, override } = require('customize-cra')
-const path = require('path')
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useBabelRc, override } from 'customize-cra';
+import { resolve } from 'path';
 
-const useCustomConfig = () => config => {
-  const alias = { '~': path.resolve(__dirname, 'src/') }
-  Object.assign(config.resolve.alias, alias)
-  config.target = 'web'
-  return config
-}
+const useCustomConfig = () => (config) => {
+  const cf = config;
+  const alias = { '~': resolve(__dirname, 'src/') };
+  Object.assign(config.resolve.alias, alias);
+  cf.target = 'web';
+  return config;
+};
 
-module.exports = override(useCustomConfig(), useBabelRc())
+export default override(useCustomConfig(), useBabelRc());
