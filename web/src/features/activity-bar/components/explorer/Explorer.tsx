@@ -8,20 +8,20 @@ import {
 import { useState, useEffect } from 'react'
 import ImageList from './ImageList'
 import ImageListItem from './ImageListItem'
-type GG = { id: string; name: string; img: string }
+import { FilePreview } from './types'
 
 const Explorer: React.FC = () => {
   const [createFileEntryMutation] = useCreateFileEntryMutation()
   const { data: fileEntriesData } = useFileEntriesQuery()
   const fileEntries = fileEntriesData?.fileEntries
 
-  const [items, setItems] = useState<GG[]>([])
+  const [items, setItems] = useState<FilePreview[]>([])
 
   useEffect(() => {
     Promise.all(
       (fileEntries ?? []).map(
         ({ id, name, blob }) =>
-          new Promise<GG>(res => {
+          new Promise<FilePreview>(res => {
             const fileReader = new FileReader()
 
             fileReader.addEventListener('load', event =>
@@ -51,7 +51,7 @@ const Explorer: React.FC = () => {
       />
       <ImageList>
         {items.map(({ id, name, img }) => (
-          <ImageListItem key={id} name={name} img={img} />
+          <ImageListItem key={id} id={id} name={name} img={img} />
         ))}
       </ImageList>
     </div>

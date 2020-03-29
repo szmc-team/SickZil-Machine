@@ -1,10 +1,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
+import { FilePreview } from './types'
 
-interface ImageListItemProps {
-  img: string
-  name: string
-}
+interface ImageListItemProps extends FilePreview {}
 
 const ImageListItem: React.FC<ImageListItemProps> = ({ img, name }) => {
   return (
