@@ -1,3 +1,4 @@
-[![ci](https://github.com/szmc-team/SickZil-Machine/workflows/ci/badge.svg)](https://github.com/szmc-team/SickZil-Machine/actions) [![codecov](https://codecov.io/gh/szmc-team/SickZil-Machine/branch/develop/graph/badge.svg)](https://codecov.io/gh/szmc-team/SickZil-Machine)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/szmc-team/SickZil-Machine/ci?style=flat-square&logo=github)
+![Codecov](https://img.shields.io/codecov/c/github/szmc-team/SickZil-Machine?style=flat-square&logo=codecov)
 
 # SZMC
