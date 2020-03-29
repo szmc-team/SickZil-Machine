@@ -9,6 +9,7 @@ const Editor: React.FC = () => {
   const [img, setImg] = useState<string>('')
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
+  const [rect, setRect] = useState<DOMRect>()
 
   const prev = useRef<Position2D>({ x: 0, y: 0 })
   const curr = useRef<Position2D>({ x: 0, y: 0 })
@@ -16,10 +17,9 @@ const Editor: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
-    console.log(canvasRef.current)
     if (canvasRef.current) {
       setContext(canvasRef.current.getContext('2d'))
-      console.log('Context is set!')
+      setRect(canvasRef.current.getBoundingClientRect())
     }
   }, [canvasRef.current])
 
@@ -27,15 +27,17 @@ const Editor: React.FC = () => {
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
     if (e.button) return
-    const { clientX, clientY } = e
     setIsDrawing(true)
+
+    if (!rect) return
+    const { clientX, clientY } = e
     prev.current = {
-      x: clientX,
-      y: clientY,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     }
     curr.current = {
-      x: clientX,
-      y: clientY,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     }
   }
 
@@ -43,14 +45,16 @@ const Editor: React.FC = () => {
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
     e.persist()
+    if (!rect) return
+
     if (!timer) {
       timer = setTimeout(() => {
         timer = null
         if (context && isDrawing) {
           prev.current = curr.current
           curr.current = {
-            x: e.clientX,
-            y: e.clientY,
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
           }
 
           drawLine(context, prev.current, curr.current)
@@ -61,7 +65,6 @@ const Editor: React.FC = () => {
 
   const handleMouseUp = () => {
     setIsDrawing(false)
-    console.log('Mouse Up!')
   }
 
   return (
