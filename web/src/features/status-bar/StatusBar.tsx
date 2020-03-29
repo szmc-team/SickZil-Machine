@@ -2,15 +2,15 @@
 import { jsx, css } from '@emotion/core'
 
 const StatusBar: React.FC = () => {
-  return <div css={styles.statusBar}>HELLO HELLO</div>
+  return <div css={styles.statusBar}>Idle</div>
 }
 
 const styles = {
   statusBar: css`
-    background-color: blue;
+    background-color: rgb(0, 120, 210);
     color: white;
-    font-weight: 900;
-    padding: 6px;
+    font-weight: 700;
+    padding: 6px 24px;
   `,
 }
 
