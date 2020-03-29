@@ -1,5 +1,4 @@
-import { MutationCreateFileEntryArgs } from '../../operations'
-import { ResolverContext } from '../../types'
+import { MutationCreateFileEntryArgs, ResolverContext } from '~/graphql'
 
 export async function createFileEntry(
   _: void,

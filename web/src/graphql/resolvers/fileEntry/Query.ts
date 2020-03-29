@@ -1,5 +1,4 @@
-import { ResolverContext } from '../../types'
-import { QueryFileEntryArgs } from '../../operations'
+import { ResolverContext, QueryFileEntryArgs } from '~/graphql'
 
 export async function fileEntry(
   _: void,

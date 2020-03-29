@@ -4,7 +4,7 @@ import {
   useCreateFileEntryMutation,
   useFileEntriesQuery,
   FileEntriesDocument,
-} from '../../../../graphql'
+} from '~/graphql'
 import { useState, useEffect } from 'react'
 import ImageList from './ImageList'
 import ImageListItem from './ImageListItem'
