@@ -1,0 +1,44 @@
+name: Mac CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  Tests:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Install dependencies
+        run: |
+          cd web
+          yarn
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
+          CI: true
+
+      - name: Run Type
+        run: yarn type
+        working-directory: ./web
+
+      - name: Run Test(Jest)
+        run: yarn test
+        working-directory: ./web
+
+      - name: Run Build
+        run: yarn build
+        working-directory: ./web
