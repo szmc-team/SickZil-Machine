@@ -30,15 +30,17 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
           CI: true
-
-      - name: Run Build
-        run: yarn build
-        working-directory: ./web
-      
-      - name: Run test
-        run: yarn test
-        working-directory: ./web
       
       - name: Run Type
         run: yarn type
         working-directory: ./web
+      
+      - name: Run Test(Jest)
+        run: yarn test
+        working-directory: ./web
+      
+      - name: Run Build
+        run: yarn build
+        working-directory: ./web
+      
+      
