@@ -1,4 +1,4 @@
-name: build
+name: ci
 
 on:
   push:
@@ -15,6 +15,7 @@ jobs:
 
       - name: Cache dependencies
         uses: actions/cache@v1
+        working-directory: ./web
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
@@ -23,12 +24,19 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install dependencies
-        run: |
-          cd web
-          yarn
+        run: yarn
+        working-directory: ./web
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
           CI: true
+
+      - name: Check types
+        run: yarn type
+        working-directory: ./web
+
+      - name: Tests
+        run: yarn test
+        working-directory: ./web
 
       - name: Build
         run: yarn build
