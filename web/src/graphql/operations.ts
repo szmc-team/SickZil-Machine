@@ -9,140 +9,291 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  Blob: Blob
   File: File
 }
 
-export type CreateFileInput = {
+export type CreateFileEntryInput = {
   file: Scalars['File']
+}
+
+export type DeleteFileEntryInput = {
+  id: Scalars['ID']
+}
+
+export type FileEntry = {
+  __typename?: 'FileEntry'
+  id: Scalars['ID']
+  blob: Scalars['Blob']
+  name: Scalars['String']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createFile: Scalars['ID']
+  createFileEntry: Scalars['ID']
+  deleteFileEntry: Scalars['Boolean']
 }
 
-export type MutationCreateFileArgs = {
-  input: CreateFileInput
+export type MutationCreateFileEntryArgs = {
+  input: CreateFileEntryInput
+}
+
+export type MutationDeleteFileEntryArgs = {
+  input: DeleteFileEntryInput
 }
 
 export type Query = {
   __typename?: 'Query'
-  file: Maybe<Scalars['File']>
+  fileEntry: Maybe<FileEntry>
+  fileEntries: Array<FileEntry>
 }
 
-export type QueryFileArgs = {
+export type QueryFileEntryArgs = {
   id: Scalars['ID']
 }
 
-export type CreateFileMutationVariables = {
-  input: CreateFileInput
+export type CreateFileEntryMutationVariables = {
+  input: CreateFileEntryInput
 }
 
-export type CreateFileMutation = { __typename?: 'Mutation' } & Pick<
+export type CreateFileEntryMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
-  'createFile'
+  'createFileEntry'
 >
 
-export type FileQueryVariables = {
+export type DeleteFileEntryMutationVariables = {
+  input: DeleteFileEntryInput
+}
+
+export type DeleteFileEntryMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'deleteFileEntry'
+>
+
+export type FileEntriesQueryVariables = {}
+
+export type FileEntriesQuery = { __typename?: 'Query' } & {
+  fileEntries: Array<
+    { __typename?: 'FileEntry' } & Pick<FileEntry, 'id' | 'name' | 'blob'>
+  >
+}
+
+export type FileEntryQueryVariables = {
   id: Scalars['ID']
 }
 
-export type FileQuery = { __typename?: 'Query' } & Pick<Query, 'file'>
+export type FileEntryQuery = { __typename?: 'Query' } & {
+  fileEntry: Maybe<
+    { __typename?: 'FileEntry' } & Pick<FileEntry, 'id' | 'name' | 'blob'>
+  >
+}
 
-export const CreateFileDocument = gql`
-  mutation createFile($input: CreateFileInput!) {
-    createFile(input: $input) @client
+export const CreateFileEntryDocument = gql`
+  mutation createFileEntry($input: CreateFileEntryInput!) {
+    createFileEntry(input: $input) @client
   }
 `
-export type CreateFileMutationFn = ApolloReactCommon.MutationFunction<
-  CreateFileMutation,
-  CreateFileMutationVariables
+export type CreateFileEntryMutationFn = ApolloReactCommon.MutationFunction<
+  CreateFileEntryMutation,
+  CreateFileEntryMutationVariables
 >
 
 /**
- * __useCreateFileMutation__
+ * __useCreateFileEntryMutation__
  *
- * To run a mutation, you first call `useCreateFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateFileMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateFileEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFileEntryMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createFileMutation, { data, loading, error }] = useCreateFileMutation({
+ * const [createFileEntryMutation, { data, loading, error }] = useCreateFileEntryMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateFileMutation(
+export function useCreateFileEntryMutation(
   baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateFileMutation,
-    CreateFileMutationVariables
+    CreateFileEntryMutation,
+    CreateFileEntryMutationVariables
   >
 ) {
   return ApolloReactHooks.useMutation<
-    CreateFileMutation,
-    CreateFileMutationVariables
-  >(CreateFileDocument, baseOptions)
+    CreateFileEntryMutation,
+    CreateFileEntryMutationVariables
+  >(CreateFileEntryDocument, baseOptions)
 }
-export type CreateFileMutationHookResult = ReturnType<
-  typeof useCreateFileMutation
+export type CreateFileEntryMutationHookResult = ReturnType<
+  typeof useCreateFileEntryMutation
 >
-export type CreateFileMutationResult = ApolloReactCommon.MutationResult<
-  CreateFileMutation
+export type CreateFileEntryMutationResult = ApolloReactCommon.MutationResult<
+  CreateFileEntryMutation
 >
-export type CreateFileMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateFileMutation,
-  CreateFileMutationVariables
+export type CreateFileEntryMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateFileEntryMutation,
+  CreateFileEntryMutationVariables
 >
-export const FileDocument = gql`
-  query file($id: ID!) {
-    file(id: $id) @client
+export const DeleteFileEntryDocument = gql`
+  mutation deleteFileEntry($input: DeleteFileEntryInput!) {
+    deleteFileEntry(input: $input) @client
+  }
+`
+export type DeleteFileEntryMutationFn = ApolloReactCommon.MutationFunction<
+  DeleteFileEntryMutation,
+  DeleteFileEntryMutationVariables
+>
+
+/**
+ * __useDeleteFileEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteFileEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFileEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFileEntryMutation, { data, loading, error }] = useDeleteFileEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteFileEntryMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteFileEntryMutation,
+    DeleteFileEntryMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    DeleteFileEntryMutation,
+    DeleteFileEntryMutationVariables
+  >(DeleteFileEntryDocument, baseOptions)
+}
+export type DeleteFileEntryMutationHookResult = ReturnType<
+  typeof useDeleteFileEntryMutation
+>
+export type DeleteFileEntryMutationResult = ApolloReactCommon.MutationResult<
+  DeleteFileEntryMutation
+>
+export type DeleteFileEntryMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteFileEntryMutation,
+  DeleteFileEntryMutationVariables
+>
+export const FileEntriesDocument = gql`
+  query fileEntries {
+    fileEntries @client {
+      id
+      name
+      blob
+    }
   }
 `
 
 /**
- * __useFileQuery__
+ * __useFileEntriesQuery__
  *
- * To run a query within a React component, call `useFileQuery` and pass it any options that fit your needs.
- * When your component renders, `useFileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFileEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFileEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFileQuery({
+ * const { data, loading, error } = useFileEntriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFileEntriesQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    FileEntriesQuery,
+    FileEntriesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<FileEntriesQuery, FileEntriesQueryVariables>(
+    FileEntriesDocument,
+    baseOptions
+  )
+}
+export function useFileEntriesLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    FileEntriesQuery,
+    FileEntriesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    FileEntriesQuery,
+    FileEntriesQueryVariables
+  >(FileEntriesDocument, baseOptions)
+}
+export type FileEntriesQueryHookResult = ReturnType<typeof useFileEntriesQuery>
+export type FileEntriesLazyQueryHookResult = ReturnType<
+  typeof useFileEntriesLazyQuery
+>
+export type FileEntriesQueryResult = ApolloReactCommon.QueryResult<
+  FileEntriesQuery,
+  FileEntriesQueryVariables
+>
+export const FileEntryDocument = gql`
+  query fileEntry($id: ID!) {
+    fileEntry(id: $id) @client {
+      id
+      name
+      blob
+    }
+  }
+`
+
+/**
+ * __useFileEntryQuery__
+ *
+ * To run a query within a React component, call `useFileEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFileEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFileEntryQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useFileQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<FileQuery, FileQueryVariables>
-) {
-  return ApolloReactHooks.useQuery<FileQuery, FileQueryVariables>(
-    FileDocument,
-    baseOptions
-  )
-}
-export function useFileLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    FileQuery,
-    FileQueryVariables
+export function useFileEntryQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    FileEntryQuery,
+    FileEntryQueryVariables
   >
 ) {
-  return ApolloReactHooks.useLazyQuery<FileQuery, FileQueryVariables>(
-    FileDocument,
+  return ApolloReactHooks.useQuery<FileEntryQuery, FileEntryQueryVariables>(
+    FileEntryDocument,
     baseOptions
   )
 }
-export type FileQueryHookResult = ReturnType<typeof useFileQuery>
-export type FileLazyQueryHookResult = ReturnType<typeof useFileLazyQuery>
-export type FileQueryResult = ApolloReactCommon.QueryResult<
-  FileQuery,
-  FileQueryVariables
+export function useFileEntryLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    FileEntryQuery,
+    FileEntryQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<FileEntryQuery, FileEntryQueryVariables>(
+    FileEntryDocument,
+    baseOptions
+  )
+}
+export type FileEntryQueryHookResult = ReturnType<typeof useFileEntryQuery>
+export type FileEntryLazyQueryHookResult = ReturnType<
+  typeof useFileEntryLazyQuery
+>
+export type FileEntryQueryResult = ApolloReactCommon.QueryResult<
+  FileEntryQuery,
+  FileEntryQueryVariables
 >
 
 export interface IntrospectionResultData {

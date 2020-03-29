@@ -1,19 +1,19 @@
-import * as Mutation from './Mutation'
-import * as Query from './Query'
+import { fileEntryResolver } from './fileEntry'
 
-const resolvers = { Mutation, Query }
+const resolvers = [fileEntryResolver]
 
-export function configureResolvers(ctx: any) {
-  return Object.fromEntries(
-    Object.entries(resolvers).map(([name, resolverObject]) => [
-      name,
-      Object.fromEntries(
-        Object.entries(resolverObject).map(([name, resolverFn]) => [
-          name,
-          (root: any, args: any, context: any, info: any) =>
-            resolverFn(root, args, { ...context, ...ctx }, info),
-        ])
-      ),
-    ])
+export const configureResolvers = (ctx: any) =>
+  resolvers.map(resolver =>
+    Object.fromEntries(
+      Object.entries<any>(resolver).map(([name, resolverObject]) => [
+        name,
+        Object.fromEntries(
+          Object.entries<any>(resolverObject).map(([name, resolverFn]) => [
+            name,
+            (root: any, args: any, context: any, info: any) =>
+              resolverFn(root, args, { ...context, ...ctx }, info),
+          ])
+        ),
+      ])
+    )
   )
-}

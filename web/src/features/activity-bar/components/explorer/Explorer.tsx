@@ -1,66 +1,57 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { hacker } from 'faker'
 import {
-  useCreateFileMutation,
-  FileDocument,
-  useFileQuery,
-} from '../../../../graphql'
+  useCreateFileEntryMutation,
+  useFileEntriesQuery,
+  FileEntriesDocument,
+} from '~/graphql'
 import { useState, useEffect } from 'react'
 import ImageList from './ImageList'
 import ImageListItem from './ImageListItem'
+import { FilePreview } from './types'
 
 const Explorer: React.FC = () => {
-  const [createFileMutation] = useCreateFileMutation()
-  const { data } = useFileQuery({ variables: { id: '111' } })
-  const [img, setImg] = useState('')
+  const [createFileEntryMutation] = useCreateFileEntryMutation({
+    refetchQueries: [{ query: FileEntriesDocument }],
+    awaitRefetchQueries: true,
+  })
+  const { data: fileEntriesData } = useFileEntriesQuery()
+  const fileEntries = fileEntriesData?.fileEntries
+
+  const [items, setItems] = useState<FilePreview[]>([])
 
   useEffect(() => {
-    const file = data?.file
-    if (!file) return
+    Promise.all(
+      (fileEntries ?? []).map(
+        ({ id, name, blob }) =>
+          new Promise<FilePreview>(res => {
+            const fileReader = new FileReader()
 
-    const fileReader = new FileReader()
+            fileReader.addEventListener('load', event =>
+              res({ id, name, img: event.target!.result as string })
+            )
 
-    fileReader.addEventListener('load', event => {
-      const img = event.target?.result
-      if (typeof img === 'string') setImg(img)
-    })
-
-    fileReader.readAsDataURL(file)
-  }, [data])
+            fileReader.readAsDataURL(blob)
+          })
+      )
+    ).then(items => setItems(items))
+  }, [fileEntries])
 
   return (
     <div css={styles.activityBar}>
-      <img
-        src={img}
-        css={css`
-          width: 160px;
-          height: 160px;
-          object-fit: contain;
-        `}
-      />
       <input
         type="file"
         accept="image/*"
         onChange={async e => {
           const file = e.target.files?.[0]
           if (!file) return
-          await createFileMutation({
-            variables: { input: { file } },
-            refetchQueries: [{ query: FileDocument, variables: { id: '111' } }],
-            awaitRefetchQueries: true,
-          })
+          await createFileEntryMutation({ variables: { input: { file } } })
         }}
       />
       <ImageList>
-        {Array.from({ length: 12 })
-          .map((_, idx) => ({
-            id: idx,
-            value: hacker.abbreviation(),
-          }))
-          .map(({ id, value }) => (
-            <ImageListItem key={id} name={value} img={img} />
-          ))}
+        {items.map(({ id, name, img }) => (
+          <ImageListItem key={id} id={id} name={name} img={img} />
+        ))}
       </ImageList>
     </div>
   )

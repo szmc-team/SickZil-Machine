@@ -1,16 +1,27 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
+import { FilePreview } from './types'
+import { useDeleteFileEntryMutation, FileEntriesDocument } from '~/graphql'
 
-interface ImageListItemProps {
-  img: string
-  name: string
-}
+interface ImageListItemProps extends FilePreview {}
 
-const ImageListItem: React.FC<ImageListItemProps> = ({ img, name }) => {
+const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
+  const [deleteFileEntry] = useDeleteFileEntryMutation({
+    refetchQueries: [{ query: FileEntriesDocument }],
+    awaitRefetchQueries: true,
+  })
+
   return (
     <li css={styles.item}>
       <img src={img} css={styles.img} />
       <span css={styles.name}>{name}</span>
+      <button
+        onClick={() => {
+          deleteFileEntry({ variables: { input: { id } } })
+        }}
+      >
+        DELETE
+      </button>
     </li>
   )
 }
