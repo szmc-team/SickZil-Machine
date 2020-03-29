@@ -24,7 +24,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Install dependencies
-        run: yarn
+        run: cd web && yarn
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
           CI: true
