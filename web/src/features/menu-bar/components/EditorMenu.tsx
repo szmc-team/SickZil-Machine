@@ -16,6 +16,7 @@ const EditorMenu: React.FC = () => {
 const styles = {
   editorMenu: css`
     display: flex;
+    flex: 1;
     justify-content: center;
   `,
   icon: css`

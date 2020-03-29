@@ -33,6 +33,7 @@ const ApplicationMenu: React.FC = () => {
 const styles = {
   applicationMenu: css`
     display: flex;
+    flex: 1;
     justify-content: flex-start;
   `,
   menuItem: css`

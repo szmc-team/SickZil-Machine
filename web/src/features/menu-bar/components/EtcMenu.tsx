@@ -17,6 +17,7 @@ const EtcMenu: React.FC = () => {
 const styles = {
   etcMenu: css`
     display: flex;
+    flex: 1;
     justify-content: flex-end;
   `,
   icon: css`
