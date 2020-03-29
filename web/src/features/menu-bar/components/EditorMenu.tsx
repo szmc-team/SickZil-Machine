@@ -4,12 +4,7 @@ import { MdBrush, MdUndo, MdRedo, MdTranslate } from 'react-icons/md'
 
 const EditorMenu: React.FC = () => {
   return (
-    <div
-      css={css`
-        display: flex;
-        justify-content: center;
-      `}
-    >
+    <div css={styles.editorMenu}>
       <MdBrush css={styles.icon} size={24} />
       <MdTranslate css={styles.icon} size={24} />
       <MdUndo css={styles.icon} size={24} />
@@ -19,6 +14,10 @@ const EditorMenu: React.FC = () => {
 }
 
 const styles = {
+  editorMenu: css`
+    display: flex;
+    justify-content: center;
+  `,
   icon: css`
     margin: 12px;
     cursor: pointer;

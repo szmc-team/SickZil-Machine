@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import ActivityBar from '../activity-bar'
 import Editor from '../editor'
 import StatusBar from '../status-bar'
 import MenuBar from '../menu-bar'
+import Explorer from '../explorer'
 
 const App: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const App: React.FC = () => {
         <div css={styles.row}>
           <Editor />
           <div css={styles.activityBarWrapper}>
-            <ActivityBar />
+            <Explorer />
           </div>
         </div>
         <StatusBar />
