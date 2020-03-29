@@ -7,7 +7,7 @@ on:
     branches: [develop]
 
 jobs:
-  Tests:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,9 +18,6 @@ jobs:
         with:
           path: web/node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
 
       - name: Install dependencies
         run: yarn
