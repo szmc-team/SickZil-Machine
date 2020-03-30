@@ -1,9 +1,8 @@
 import { fileEntryResolver } from './fileEntry'
-import { ResolverContext } from '../types'
 
 const resolvers = [fileEntryResolver]
 
-export const configureResolvers = (ctx: ResolverContext) =>
+export const configureResolvers = (ctx: any) =>
   resolvers.map(resolver =>
     Object.fromEntries(
       Object.entries<any>(resolver).map(([name, resolverObject]) => [

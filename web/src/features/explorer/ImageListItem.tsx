@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { FilePreview } from '../types'
+import { FilePreview } from './types'
 import { useDeleteFileEntryMutation, FileEntriesDocument } from '~/graphql'
 
 interface ImageListItemProps extends FilePreview {}
@@ -17,7 +17,9 @@ const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
       <div>
         <span css={styles.name}>{name}</span>
         <button
-          onClick={() => deleteFileEntry({ variables: { input: { id } } })}
+          onClick={() => {
+            deleteFileEntry({ variables: { input: { id } } })
+          }}
         >
           DELETE
         </button>

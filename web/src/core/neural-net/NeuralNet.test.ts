@@ -1,4 +1,3 @@
-import '@tensorflow/tfjs-node'
 import nn from './NeuralNet'
 
 test('chk', () => {
