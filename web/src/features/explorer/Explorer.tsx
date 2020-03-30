@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react'
 import { jsx, css } from '@emotion/core'
 import { useFileEntriesQuery } from '~/graphql'
-import ImageList from './ImageList'
-import ImageListItem from './ImageListItem'
+import ImageList from './components/ImageList'
+import ImageListItem from './components/ImageListItem'
 import { FilePreview } from './types'
 
 const Explorer: React.FC = () => {
@@ -18,7 +18,6 @@ const Explorer: React.FC = () => {
         ({ id, name, blob }) =>
           new Promise<FilePreview>(res => {
             const fileReader = new FileReader()
-
             fileReader.addEventListener('load', event =>
               res({ id, name, img: event.target!.result as string })
             )
