@@ -1,10 +1,11 @@
+const { resolve } = require('path')
 /* eslint-disable max-len */
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
   moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['\\\\node_modules\\\\'],
   transform: {
     '^.+\\.(js|jsx)?$': 'babel-jest',
@@ -29,7 +30,13 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    'src/**/*.tsx',
+    '!src/graphql/operations.ts',
+    '!src/serviceWorker.ts',
+    '!src/setupTests.ts',
+  ],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
@@ -87,7 +94,9 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    '^~/(.*)$': resolve(__dirname, './src/$1'),
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
