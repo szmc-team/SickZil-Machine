@@ -1,38 +1,18 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
 import { jsx, css } from '@emotion/core'
 import { useFileEntriesQuery } from '~/graphql'
 import ImageList from './components/ImageList'
 import ImageListItem from './components/ImageListItem'
-import { FilePreview } from './types'
 
 const Explorer: React.FC = () => {
   const { data: fileEntriesData } = useFileEntriesQuery()
   const fileEntries = fileEntriesData?.fileEntries
 
-  const [items, setItems] = useState<FilePreview[]>([])
-
-  useEffect(() => {
-    Promise.all(
-      (fileEntries ?? []).map(
-        ({ id, name, blob }) =>
-          new Promise<FilePreview>(res => {
-            const fileReader = new FileReader()
-            fileReader.addEventListener('load', event =>
-              res({ id, name, img: event.target!.result as string })
-            )
-
-            fileReader.readAsDataURL(blob)
-          })
-      )
-    ).then(items => setItems(items))
-  }, [fileEntries])
-
   return (
     <div css={styles.explorer}>
       <ImageList>
-        {items.map(({ id, name, img }) => (
-          <ImageListItem key={id} id={id} name={name} img={img} />
+        {fileEntries?.map(({ id, name, url }) => (
+          <ImageListItem key={id} id={id} name={name} img={url} />
         ))}
       </ImageList>
     </div>
