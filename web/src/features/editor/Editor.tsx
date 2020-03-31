@@ -1,9 +1,25 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { subject } from '../explorer/components/ImageListItem'
+import { useFileEntryQuery } from '~/graphql'
 
 const Editor: React.FC = () => {
   const [img, setImg] = useState<string>('')
+  const [imgId, setImgId] = useState<string>('')
+
+  const { data: fileEntryData } = useFileEntryQuery({
+    variables: {
+      id: imgId
+    }
+  })
+  const fileEntry = fileEntryData?.fileEntry
+
+  subject.subscribe({
+    next: (v: String) => {
+      setImgId(v as string)
+    }
+  })
 
   return (
     <div css={styles.editor}>
@@ -14,23 +30,6 @@ const Editor: React.FC = () => {
           height: 100%;
         `}
       >
-        <input
-          type="file"
-          accept="image/*"
-          css={css`
-            display: none;
-          `}
-          onChange={e => {
-            const file = e.target.files?.[0]
-            if (!file) return
-
-            const fileReader = new FileReader()
-            fileReader.addEventListener('load', event => {
-              setImg((event.target?.result as string) ?? null)
-            })
-            fileReader.readAsDataURL(file)
-          }}
-        />
         <img
           css={css`
             width: 100%;
