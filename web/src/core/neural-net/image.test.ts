@@ -1,7 +1,9 @@
-import { Tensor, tensor3d, tensor2d } from '@tensorflow/tfjs';
+import {
+  Tensor, tensor3d, tensor2d, stack,
+} from '@tensorflow/tfjs';
 import { PNG } from 'pngjs';
 import fs from 'fs';
-import { mapColor } from './image';
+import { mapColor, rgb } from './image';
 
 const readPng = (path: string) => {
   const buf = fs.readFileSync(path);
@@ -10,10 +12,8 @@ const readPng = (path: string) => {
   return tensor3d(arr, [png.height, png.width, 4]);
 };
 
-const shallowEqual = <T>(xs: Array<T>, ys: Array<T>) =>
-  (xs.length === ys.length && xs.every((e, i) => e === ys[i]));
-const tensorEqual = (x: Tensor, y: Tensor) =>
-  (shallowEqual(x.shape, y.shape)
+const shallowEqual = <T>(xs: Array<T>, ys: Array<T>) => (xs.length === ys.length && xs.every((e, i) => e === ys[i]));
+const tensorEqual = (x: Tensor, y: Tensor) => (shallowEqual(x.shape, y.shape)
   ? (!!x.equal(y).all().dataSync()[0]) : false);
 
 test('tensorEqual', () => {
@@ -34,26 +34,31 @@ test('map rb tensor to wk', () => {
     [[1, 0, 0], [1, 0, 0], [1, 0, 0]],
     [[0, 0, 1], [0, 0, 1], [0, 0, 1]],
   ]);
-  
+
   const expected = tensor3d([
     [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
     [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
   ]);
-  
+
   const mapping = tensor2d([
-    [1,1,1],
-    [1,1,1],
-    [0,0,0],
-  ])
-  
+    [1, 1, 1],
+    [1, 1, 1],
+    [0, 0, 0],
+  ]);
+
   const mapped = mapColor(mapping, oneHot);
   expect(tensorEqual(mapped, expected)).toBe(true);
 });
 
 test('mock test', () => {
-  const oneHot = readPng('./src/mocks/rgb_1hot.png');
-  const expected = readPng('./src/mocks/wk_ans.png');
-  // img.print();
-  console.log(oneHot);
-  console.log(expected);
+  const oneHot = rgb(readPng('./src/mocks/rgb_1hot.png'));
+  const expected = rgb(readPng('./src/mocks/wk_ans.png'));
+  const map = tensor2d([
+    [1, 1, 1],
+    [1, 1, 1],
+    [0, 0, 0],
+  ]);
+
+  const mapped = mapColor(map, oneHot);
+  expect(tensorEqual(mapped, expected)).toBe(true);
 });
