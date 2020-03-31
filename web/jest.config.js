@@ -13,6 +13,12 @@ module.exports = {
   preset: 'ts-jest',
   // All imported modules in your tests should be mocked automatically
   // automock: false,
+  moduleNameMapper: {
+    '^~/(.*)$': resolve(__dirname, './src/$1'),
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/assetsTransformer.js',
+    '\\.(css|less)$': '<rootDir>/assetsTransformer.js',
+  },
 
   // Stop running tests after `n` failures
   // bail: 0,
@@ -94,9 +100,6 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  moduleNameMapper: {
-    '^~/(.*)$': resolve(__dirname, './src/$1'),
-  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
