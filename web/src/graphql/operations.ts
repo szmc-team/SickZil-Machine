@@ -26,6 +26,7 @@ export type FileEntry = {
   id: Scalars['ID']
   blob: Scalars['Blob']
   name: Scalars['String']
+  url: Scalars['String']
 }
 
 export type Mutation = {
@@ -74,7 +75,10 @@ export type FileEntriesQueryVariables = {}
 
 export type FileEntriesQuery = { __typename?: 'Query' } & {
   fileEntries: Array<
-    { __typename?: 'FileEntry' } & Pick<FileEntry, 'id' | 'name' | 'blob'>
+    { __typename?: 'FileEntry' } & Pick<
+      FileEntry,
+      'id' | 'name' | 'blob' | 'url'
+    >
   >
 }
 
@@ -84,7 +88,10 @@ export type FileEntryQueryVariables = {
 
 export type FileEntryQuery = { __typename?: 'Query' } & {
   fileEntry: Maybe<
-    { __typename?: 'FileEntry' } & Pick<FileEntry, 'id' | 'name' | 'blob'>
+    { __typename?: 'FileEntry' } & Pick<
+      FileEntry,
+      'id' | 'name' | 'blob' | 'url'
+    >
   >
 }
 
@@ -190,6 +197,7 @@ export const FileEntriesDocument = gql`
       id
       name
       blob
+      url
     }
   }
 `
@@ -245,6 +253,7 @@ export const FileEntryDocument = gql`
       id
       name
       blob
+      url
     }
   }
 `
