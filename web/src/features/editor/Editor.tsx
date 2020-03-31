@@ -9,7 +9,7 @@ const Editor: React.FC = () => {
   const [img, setImg] = useState<string>('')
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
-  const [rect, setRect] = useState<DOMRect>()
+  const [rect, setRect] = useState<DOMRect | null>(null)
 
   const prev = useRef<Position2D>({ x: 0, y: 0 })
   const curr = useRef<Position2D>({ x: 0, y: 0 })
@@ -18,18 +18,16 @@ const Editor: React.FC = () => {
 
   useEffect(() => {
     if (canvasRef.current) {
-      setContext(canvasRef.current.getContext('2d'))
       setRect(canvasRef.current.getBoundingClientRect())
+      setContext(canvasRef.current.getContext('2d'))
     }
-  }, [canvasRef.current])
+  }, [img])
 
   const handleMouseDown = (
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
-    if (e.button) return
+    if (e.button || !rect) return
     setIsDrawing(true)
-
-    if (!rect) return
     const { clientX, clientY } = e
     prev.current = {
       x: clientX - rect.left,
