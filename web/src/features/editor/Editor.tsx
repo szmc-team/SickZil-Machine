@@ -13,12 +13,14 @@ const Editor: React.FC = () => {
       id: imgId
     }
   })
-  
+
   const fileEntry = fileEntryData?.fileEntry
-  var reader = new FileReader();
+  const reader = new FileReader();
+
   if (fileEntry?.blob) {
     reader.readAsDataURL(fileEntry?.blob!);
   }
+  
   reader.onloadend = function() {
     var base64data = reader.result;                
     setImg(base64data as string);
