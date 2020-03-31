@@ -5,32 +5,19 @@ import { subject } from '../explorer/components/ImageListItem'
 import { useFileEntryQuery } from '~/graphql'
 
 const Editor: React.FC = () => {
-  const [img, setImg] = useState<string>('')
   const [imgId, setImgId] = useState<string>('')
 
   const { data: fileEntryData } = useFileEntryQuery({
     variables: {
-      id: imgId
-    }
+      id: imgId,
+    },
   })
-
   const fileEntry = fileEntryData?.fileEntry
-  const reader = new FileReader();
-
-  if (fileEntry?.blob) {
-    reader.readAsDataURL(fileEntry?.blob!);
-  }
-  
-  reader.onloadend = function() {
-    var base64data = reader.result;                
-    setImg(base64data as string);
-  }
 
   subject.subscribe({
     next: (v: String) => {
       setImgId(v as string)
-      console.log(v)
-    }
+    },
   })
 
   return (
@@ -48,7 +35,7 @@ const Editor: React.FC = () => {
             height: 100%;
             object-fit: contain;
           `}
-          src={img}
+          src={fileEntry?.url}
         />
       </label>
     </div>
