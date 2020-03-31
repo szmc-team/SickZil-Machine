@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { subject } from '../explorer/components/ImageListItem'
 import { useFileEntryQuery } from '~/graphql'
 
@@ -13,15 +13,21 @@ const Editor: React.FC = () => {
       id: imgId
     }
   })
+  
   const fileEntry = fileEntryData?.fileEntry
-
-  useEffect(() => {
-    console.log(fileEntry)
-  }, [fileEntry])
+  var reader = new FileReader();
+  if (fileEntry?.blob) {
+    reader.readAsDataURL(fileEntry?.blob!);
+  }
+  reader.onloadend = function() {
+    var base64data = reader.result;                
+    setImg(base64data as string);
+  }
 
   subject.subscribe({
     next: (v: String) => {
       setImgId(v as string)
+      console.log(v)
     }
   })
 
