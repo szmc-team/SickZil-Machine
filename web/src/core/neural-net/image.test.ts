@@ -1,57 +1,59 @@
-import * as tf from '@tensorflow/tfjs';
+import { Tensor, tensor3d, tensor2d } from '@tensorflow/tfjs';
 import { PNG } from 'pngjs';
 import fs from 'fs';
-import { f, mapColor } from './image';
+import { mapColor } from './image';
 
-const readPng = (path: string): tf.Tensor3D => {
+const readPng = (path: string) => {
   const buf = fs.readFileSync(path);
   const png = PNG.sync.read(buf);
   const arr = new Int32Array(png.data);
-  return tf.tensor3d(arr, [png.height, png.width, 4]);
+  return tensor3d(arr, [png.height, png.width, 4]);
 };
 
 const shallowEqual = <T>(xs: Array<T>, ys: Array<T>) =>
   (xs.length === ys.length && xs.every((e, i) => e === ys[i]));
-const tensorEqual = (x: tf.Tensor, y: tf.Tensor) =>
+const tensorEqual = (x: Tensor, y: Tensor) =>
   (shallowEqual(x.shape, y.shape)
   ? (!!x.equal(y).all().dataSync()[0]) : false);
 
-test('f', () => {
-  const img = readPng('./src/mocks/wk.png');
-  // img.print();
-  console.log(img);
-});
-
-
 test('tensorEqual', () => {
-  const inp = tf.tensor3d([[[1, 0, 0], [1, 0, 0]]]);
-  const same = tf.tensor3d([[[1, 0, 0], [1, 0, 0]]]);
-  const diff = tf.tensor3d([[[0, 0, 1], [0, 1, 0]]]);
+  const inp = tensor3d([[[1, 0, 0], [1, 0, 0]]]);
+  const same = tensor3d([[[1, 0, 0], [1, 0, 0]]]);
+  const diff = tensor3d([[[0, 0, 1], [0, 1, 0]]]);
   expect(tensorEqual(inp, same)).toBe(true);
   expect(tensorEqual(inp, diff)).toBe(false);
 
-  const diffShape1 = tf.tensor2d([[0, 0, 1], [0, 1, 0]]);
-  const diffShape2 = tf.tensor3d([[[0, 0], [0, 1]]]);
+  const diffShape1 = tensor2d([[0, 0, 1], [0, 1, 0]]);
+  const diffShape2 = tensor3d([[[0, 0], [0, 1]]]);
   expect(tensorEqual(inp, diffShape1)).toBe(false);
   expect(tensorEqual(inp, diffShape2)).toBe(false);
 });
 
 test('map rb tensor to wk', () => {
-  const srcDstColor = new Map([
-    [[1, 0, 0], [1, 1, 1]],
-    [[0, 0, 1], [0, 0, 0]],
+  const oneHot = tensor3d([
+    [[1, 0, 0], [1, 0, 0], [1, 0, 0]],
+    [[0, 0, 1], [0, 0, 1], [0, 0, 1]],
   ]);
-
-  const inp = tf.tensor3d([
-    [[1, 0, 0], [1, 0, 0]], [[1, 0, 0]],
-    [[0, 0, 1], [0, 0, 1]], [[0, 0, 1]],
+  
+  const expected = tensor3d([
+    [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+    [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
   ]);
-
-  const expected = tf.tensor3d([
-    [[1, 1, 1], [1, 1, 1]], [[1, 1, 1]],
-    [[0, 0, 0], [0, 0, 0]], [[0, 0, 0]],
-  ]);
-
-  const mapped = mapColor(srcDstColor, inp);
+  
+  const mapping = tensor2d([
+    [1,1,1],
+    [1,1,1],
+    [0,0,0],
+  ])
+  
+  const mapped = mapColor(mapping, oneHot);
   expect(tensorEqual(mapped, expected)).toBe(true);
+});
+
+test('mock test', () => {
+  const oneHot = readPng('./src/mocks/rgb_1hot.png');
+  const expected = readPng('./src/mocks/wk_ans.png');
+  // img.print();
+  console.log(oneHot);
+  console.log(expected);
 });

@@ -1,10 +1,9 @@
-import * as tf from '@tensorflow/tfjs';
-import { invert } from '../../utils/utils';
-// import {invert} from '~/utils/utils' // need webpack setting
+import { Tensor, matMul } from '@tensorflow/tfjs';
 
-export const f = () => {
-  const srcDst = new Map([[1, 'a'], [2, 'b'], [3, 'c']]);
-  console.log(invert(srcDst));
-};
-
-export const mapColor = <T, S>(map: Map<T, S>, tensor: tf.Tensor) => tf.tensor([1]);
+// map is mapping table(2d tensor), typically
+// map.shape = [oneHot.shape.h * 3] (oneHot -> rgb)
+// each rows are mapped color.
+export const mapColor = (map:Tensor, oneHot: Tensor) => {
+  const [h,w,c] = oneHot.shape
+  return matMul(oneHot.as2D(h*w, c), map).as3D(h,w,c)
+}
