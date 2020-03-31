@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { drawLine, Position2D } from './draw'
 
 let timer: NodeJS.Timeout | null
@@ -17,53 +17,44 @@ const Editor: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
-    if (canvasRef.current) {
-      setRect(canvasRef.current.getBoundingClientRect())
-      setContext(canvasRef.current.getContext('2d'))
-    }
+    if (!canvasRef.current) return
+
+    setRect(canvasRef.current.getBoundingClientRect())
+    setContext(canvasRef.current.getContext('2d'))
   }, [img])
 
-  const handleMouseDown = (
-    e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
-  ) => {
-    if (e.button || !rect) return
-    setIsDrawing(true)
-    const { clientX, clientY } = e
-    prev.current = {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    }
-    curr.current = {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    }
-  }
+  const startDrawing = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+      if (e.button || !rect) return
+      setIsDrawing(true)
+      const { clientX, clientY } = e
+      prev.current = { x: clientX - rect.left, y: clientY - rect.top }
+      curr.current = { x: clientX - rect.left, y: clientY - rect.top }
+    },
+    [rect]
+  )
 
-  const handleMouseMove = (
-    e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
-  ) => {
-    e.persist()
-    if (!rect) return
+  const draw = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+      e.persist()
+      if (!rect) return
 
-    if (!timer) {
-      timer = setTimeout(() => {
-        timer = null
-        if (context && isDrawing) {
-          prev.current = curr.current
-          curr.current = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+      if (!timer) {
+        timer = setTimeout(() => {
+          timer = null
+          if (context && isDrawing) {
+            prev.current = curr.current
+            curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+
+            drawLine(context, prev.current, curr.current)
           }
+        }, 16)
+      }
+    },
+    [context, rect, isDrawing]
+  )
 
-          drawLine(context, prev.current, curr.current)
-        }
-      }, 16)
-    }
-  }
-
-  const handleMouseUp = () => {
-    setIsDrawing(false)
-  }
+  const stopDrawing = useCallback(() => setIsDrawing(false), [])
 
   return (
     <div css={styles.editor}>
@@ -121,11 +112,11 @@ const Editor: React.FC = () => {
                 z-index: 2;
               `}
               ref={canvasRef}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              width={imageRef.current ? imageRef.current.width : 0}
-              height={imageRef.current ? imageRef.current.height : 0}
+              onMouseDown={startDrawing}
+              onMouseMove={draw}
+              onMouseUp={stopDrawing}
+              width={imageRef.current?.width ?? 0}
+              height={imageRef.current?.height ?? 0}
             />
           )}
         </div>
