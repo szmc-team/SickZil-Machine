@@ -15,6 +15,7 @@ type FileEntry {
   id: ID!
   blob: Blob!
   name: String!
+  url: String!
 }
 
 input CreateFileEntryInput {

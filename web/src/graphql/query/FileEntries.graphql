@@ -3,5 +3,6 @@ query fileEntries {
     id
     name
     blob
+    url
   }
 }
