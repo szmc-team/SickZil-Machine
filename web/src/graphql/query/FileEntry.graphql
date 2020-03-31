@@ -1,0 +1,7 @@
+query fileEntry($id: ID!) {
+  fileEntry(id: $id) @client {
+    id
+    name
+    blob
+  }
+}

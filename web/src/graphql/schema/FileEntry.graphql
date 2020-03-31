@@ -1,0 +1,26 @@
+scalar File
+scalar Blob
+
+extend type Query {
+  fileEntry(id: ID!): FileEntry
+  fileEntries: [FileEntry!]!
+}
+
+extend type Mutation {
+  createFileEntry(input: CreateFileEntryInput!): ID!
+  deleteFileEntry(input: DeleteFileEntryInput!): Boolean!
+}
+
+type FileEntry {
+  id: ID!
+  blob: Blob!
+  name: String!
+}
+
+input CreateFileEntryInput {
+  file: File!
+}
+
+input DeleteFileEntryInput {
+  id: ID!
+}

@@ -1,30 +1,17 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import { createContext, useState, useContext, useRef, useEffect } from 'react'
+import {
+  ThemeProvider as MaterialThemeProvider,
+  createMuiTheme,
+} from '@material-ui/core'
 
-type Theme = 'light' | 'dark'
-type SetTheme = (theme: Theme) => void
-
-const ThemeContext = createContext<Theme>(null!)
-const SetThemeContext = createContext<SetTheme>(null!)
+import { blueGrey, grey } from '@material-ui/core/colors'
 
 export const ThemeProvider: React.FC = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('light')
-  const bodyEl = useRef(document.querySelector('body')!).current
-
-  useEffect(() => {
-    bodyEl.classList.add(theme)
-    return () => bodyEl.classList.remove(theme)
-  }, [bodyEl, theme])
-
+  const theme = createMuiTheme({
+    palette: { type: 'dark', primary: blueGrey, secondary: grey },
+  })
   return (
-    <ThemeContext.Provider value={theme}>
-      <SetThemeContext.Provider value={setTheme}>
-        {children}
-      </SetThemeContext.Provider>
-    </ThemeContext.Provider>
+    <MaterialThemeProvider theme={theme}> {children}</MaterialThemeProvider>
   )
 }
-
-export const useTheme = () => useContext(ThemeContext)
-export const useSetTheme = () => useContext(SetThemeContext)

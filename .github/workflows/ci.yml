@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: web/node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn
+        working-directory: ./web
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GPR_AUTH_TOKEN }}
+          CI: true
+
+      - name: Check types
+        run: yarn type
+        working-directory: ./web
+
+      - name: Tests
+        run: yarn test
+        working-directory: ./web
+
+      - name: Build
+        run: yarn build
+        working-directory: ./web
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./web/coverage/clover.xml
