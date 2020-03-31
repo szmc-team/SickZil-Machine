@@ -77,6 +77,7 @@ const Editor: React.FC = () => {
         {img === '' ? (
           <input
             type="file"
+            aria-label="editor_input"
             accept="image/*"
             css={css`
               display: none;
@@ -111,6 +112,7 @@ const Editor: React.FC = () => {
             `}
             src={img}
             ref={imageRef}
+            alt="Image not found"
           />
           {img === '' ? null : (
             <canvas
