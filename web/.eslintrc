@@ -1,6 +1,19 @@
 {
-  "extends": "airbnb",
-  "rules": {},
+  "extends": ["airbnb", "react-app"],
+  "rules": {
+    "semi": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    }, 
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  },
   "env": {
     "es6": true
   },
