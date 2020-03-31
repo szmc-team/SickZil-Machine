@@ -1,9 +1,9 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { configureResolvers } from './resolvers'
-import { configureFileManager } from '../core/file-manager'
+import { FileManager } from '../core/file-manager'
 
 export function configureClient() {
-  const fileManager = configureFileManager()
+  const fileManager = new FileManager()
   const resolvers = configureResolvers({ fileManager })
   const cache = new InMemoryCache()
 
