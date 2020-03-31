@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.js": "/static/js/main.804a0e17.chunk.js",
-    "main.js.map": "/static/js/main.804a0e17.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.e7310a31.js",
-    "runtime-main.js.map": "/static/js/runtime-main.e7310a31.js.map",
-    "static/css/2.47271137.chunk.css": "/static/css/2.47271137.chunk.css",
-    "static/js/2.65d292cb.chunk.js": "/static/js/2.65d292cb.chunk.js",
-    "static/js/2.65d292cb.chunk.js.map": "/static/js/2.65d292cb.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.dbd365180523bca4d62aa9bc6fa0facc.js": "/precache-manifest.dbd365180523bca4d62aa9bc6fa0facc.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.47271137.chunk.css.map": "/static/css/2.47271137.chunk.css.map",
-    "static/js/2.65d292cb.chunk.js.LICENSE.txt": "/static/js/2.65d292cb.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/static/media/roboto-latin-900italic.ebf6d164.woff2"
+    "main.js": "/SickZil-Machine/static/js/main.22faa6d6.chunk.js",
+    "main.js.map": "/SickZil-Machine/static/js/main.22faa6d6.chunk.js.map",
+    "runtime-main.js": "/SickZil-Machine/static/js/runtime-main.cf5a8a91.js",
+    "runtime-main.js.map": "/SickZil-Machine/static/js/runtime-main.cf5a8a91.js.map",
+    "static/css/2.0824f9ee.chunk.css": "/SickZil-Machine/static/css/2.0824f9ee.chunk.css",
+    "static/js/2.65d292cb.chunk.js": "/SickZil-Machine/static/js/2.65d292cb.chunk.js",
+    "static/js/2.65d292cb.chunk.js.map": "/SickZil-Machine/static/js/2.65d292cb.chunk.js.map",
+    "index.html": "/SickZil-Machine/index.html",
+    "precache-manifest.1733420f90aa260fde402890f95a48dd.js": "/SickZil-Machine/precache-manifest.1733420f90aa260fde402890f95a48dd.js",
+    "service-worker.js": "/SickZil-Machine/service-worker.js",
+    "static/css/2.0824f9ee.chunk.css.map": "/SickZil-Machine/static/css/2.0824f9ee.chunk.css.map",
+    "static/js/2.65d292cb.chunk.js.LICENSE.txt": "/SickZil-Machine/static/js/2.65d292cb.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/SickZil-Machine/static/media/roboto-latin-900italic.ebf6d164.woff2"
   },
   "entrypoints": [
-    "static/js/runtime-main.e7310a31.js",
-    "static/css/2.47271137.chunk.css",
+    "static/js/runtime-main.cf5a8a91.js",
+    "static/css/2.0824f9ee.chunk.css",
     "static/js/2.65d292cb.chunk.js",
-    "static/js/main.804a0e17.chunk.js"
+    "static/js/main.22faa6d6.chunk.js"
   ]
 }
