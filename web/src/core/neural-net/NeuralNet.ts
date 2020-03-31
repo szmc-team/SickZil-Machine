@@ -1,5 +1,5 @@
-import * as tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs'
 
-const tmp = () => tf.ones([1, 2, 3]);
+const tmp = () => tf.ones([1, 2, 3])
 
-export default tmp;
+export default tmp
