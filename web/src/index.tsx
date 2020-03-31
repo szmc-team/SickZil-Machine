@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom'
 import { MemoryRouter } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 import 'typeface-roboto'
+import { ApolloProvider } from '@apollo/client'
 import App from './features/app'
 import * as serviceWorker from './serviceWorker'
 import { GlobalStyle, ThemeProvider } from './styles'
-import { ApolloProvider } from '@apollo/client'
 import { configureClient } from './graphql'
 
 const client = configureClient()

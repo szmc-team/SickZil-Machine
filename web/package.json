@@ -49,9 +49,6 @@
     "type": "npx tsc --noEmit",
     "graphql": "graphql-codegen"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -76,13 +73,15 @@
     "@graphql-codegen/typescript-react-apollo": "^1.13.1",
     "@tensorflow/tfjs-node": "^1.7.1",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
-    "@typescript-eslint/parser": "^2.25.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "@typescript-eslint/typescript-estree": "^2.25.0",
     "babel-jest": "^24.9.0",
     "customize-cra": "^0.9.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
