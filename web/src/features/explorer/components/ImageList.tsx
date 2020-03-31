@@ -1,12 +1,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 
-const MenuList: React.FC = ({ children }) => {
+const ImageList: React.FC = ({ children }) => {
   return <ul css={styles.list}>{children}</ul>
 }
 
 const styles = {
   list: css`
+    height: 100%;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -15,4 +17,4 @@ const styles = {
   `,
 }
 
-export default MenuList
+export default ImageList

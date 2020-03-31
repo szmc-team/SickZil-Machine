@@ -1,0 +1,3 @@
+mutation deleteFileEntry($input: DeleteFileEntryInput!) {
+  deleteFileEntry(input: $input) @client
+}

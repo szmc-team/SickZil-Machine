@@ -1,9 +1,7 @@
 /** @jsx jsx */
 import { jsx, Global, css } from '@emotion/core'
 
-export const GlobalStyle = () => (
-  <Global styles={[styles.master, styles.themeScheme]} />
-)
+export const GlobalStyle = () => <Global styles={styles.master} />
 
 const styles = {
   master: css`
@@ -20,17 +18,6 @@ const styles = {
     *::before,
     *::after {
       box-sizing: border-box;
-    }
-  `,
-  themeScheme: css`
-    :root {
-      --bg-color: white;
-      --text-color: black;
-    }
-
-    .dark {
-      --bg-color: black;
-      --text-color: white;
     }
   `,
 }

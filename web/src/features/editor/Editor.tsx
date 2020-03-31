@@ -134,7 +134,7 @@ const Editor: React.FC = () => {
 const styles = {
   editor: css`
     width: 100%;
-    background-color: green;
+    background-color: black;
     overflow: hidden;
   `,
 }

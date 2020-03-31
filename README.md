@@ -1,3 +1,4 @@
-[![](https://camo.githubusercontent.com/0d6ff0ec2a11aea2bf004628f74f1c62c44ccbef/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f6e696b6b752f776f726b732d6f6e2d6d792d6d616368696e654076302e322e302f62616467652e737667)](https://camo.githubusercontent.com/0d6ff0ec2a11aea2bf004628f74f1c62c44ccbef/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f6e696b6b752f776f726b732d6f6e2d6d792d6d616368696e654076302e322e302f62616467652e737667)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/szmc-team/SickZil-Machine/ci?style=flat-square&logo=github)
+![Codecov](https://img.shields.io/codecov/c/github/szmc-team/SickZil-Machine?style=flat-square&logo=codecov)
 
 # SZMC
