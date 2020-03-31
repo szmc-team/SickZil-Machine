@@ -10,11 +10,11 @@ import { GlobalStyle, ThemeProvider } from './styles'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import rootReducer from './stores/configureStores'
-
-const store = createStore(rootReducer)
 import { configureClient } from './graphql'
 
+const store = createStore(rootReducer)
 const client = configureClient()
+
 const Root: React.FC = () => (
   <Provider store={store}>
     <ApolloProvider client={client}>
