@@ -15,6 +15,10 @@ const Editor: React.FC = () => {
   })
   const fileEntry = fileEntryData?.fileEntry
 
+  useEffect(() => {
+    console.log(fileEntry)
+  }, [fileEntry])
+
   subject.subscribe({
     next: (v: String) => {
       setImgId(v as string)
