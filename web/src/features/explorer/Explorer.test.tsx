@@ -8,10 +8,13 @@ import {
 } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Explorer from './Explorer'
+import { image } from 'faker'
 
 describe('<Explorer />', () => {
   it('Render without crash', async () => {
-    let entires = [{ id: '1', name: 'file.ext', blob: new Blob() }]
+    let entires = [
+      { id: '1', name: 'file.ext', blob: new Blob(), url: image.imageUrl() },
+    ]
     const { findByText, container } = render(
       <MockedProvider
         resolvers={{
@@ -27,6 +30,7 @@ describe('<Explorer />', () => {
         <Explorer />
       </MockedProvider>
     )
+
     await wait()
 
     const deleteButton = await findByText('DELETE')
