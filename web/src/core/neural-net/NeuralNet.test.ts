@@ -1,9 +1,12 @@
+/**
+ * @jest-environment node
+ */
 import '@tensorflow/tfjs-node'
-import tmp from './NeuralNet'
 
-test('chk', () => {
+import tmp from './NeuralNet'
+test('chk', async () => {
   // console.log(nn())
   // nn().print()
-  tmp()
+  await tmp()
   expect(true).toEqual(true)
 })

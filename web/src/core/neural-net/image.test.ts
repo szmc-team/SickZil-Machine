@@ -1,4 +1,8 @@
+/**
+ * @jest-environment node
+ */
 import { Tensor, tensor3d, tensor2d } from '@tensorflow/tfjs'
+import '@tensorflow/tfjs-node'
 import { PNG } from 'pngjs'
 import fs from 'fs'
 import { mapColor, rgb } from './image'
