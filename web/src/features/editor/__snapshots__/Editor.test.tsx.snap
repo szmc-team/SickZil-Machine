@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Editor /> mathces snapshot 1`] = `
+<div>
+  <div
+    class="css-1eoobr4-Editor"
+  >
+    <label
+      class="css-dmhmyr-Editor"
+    >
+      <input
+        accept="image/*"
+        aria-label="editor_input"
+        class="css-mmdtz1-Editor"
+        type="file"
+      />
+      <div
+        class="css-15ujusl-Editor"
+      >
+        <img
+          alt="Image not found"
+          class="css-kngyu6-Editor"
+          src=""
+        />
+      </div>
+    </label>
+  </div>
+</div>
+`;
