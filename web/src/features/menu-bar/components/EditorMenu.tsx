@@ -1,11 +1,24 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import { MdBrush, MdUndo, MdRedo, MdTranslate } from 'react-icons/md'
+import { FaEraser } from 'react-icons/fa'
+import { useEditor } from '~/store/modules/editor'
 
 const EditorMenu: React.FC = () => {
+  const editor = useEditor()
+
   return (
     <div css={styles.editorMenu}>
-      <MdBrush css={styles.icon} size={24} />
+      <MdBrush
+        css={styles.icon}
+        size={24}
+        onClick={() => editor.changeMode('draw')}
+      />
+      <FaEraser
+        css={styles.icon}
+        size={24}
+        onClick={() => editor.changeMode('erase')}
+      />
       <MdTranslate css={styles.icon} size={24} />
       <MdUndo css={styles.icon} size={24} />
       <MdRedo css={styles.icon} size={24} />
