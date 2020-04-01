@@ -1,8 +1,8 @@
 import {
-  Tensor3D,
-  loadLayersModel,
-  LayersModel,
   Tensor,
+  Tensor3D,
+  LayersModel,
+  loadLayersModel,
 } from '@tensorflow/tfjs'
 import { readPng } from './nodeUtils'
 import { rgb } from './image'
