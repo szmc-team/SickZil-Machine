@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import { globalReducer } from './modules/global'
+import { editorReducer } from './modules/editor'
 
 const rootReducer = combineReducers({
-  global: globalReducer,
+  editor: editorReducer,
 })
 
 export default rootReducer

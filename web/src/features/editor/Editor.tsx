@@ -2,9 +2,19 @@
 import { jsx, css } from '@emotion/core'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { drawLine, Position2D } from './draw'
+import { useEditorState } from '~/store/modules/editor'
+import { useFileEntryQuery, useFileEntryLazyQuery } from '~/graphql'
 
 const Editor: React.FC = () => {
-  const [img, setImg] = useState<string>('')
+  const { fileEntryId } = useEditorState()
+  const [loadFileEntry, { data }] = useFileEntryLazyQuery()
+
+  useEffect(() => {
+    if (fileEntryId) loadFileEntry({ variables: { id: fileEntryId } })
+  }, [loadFileEntry, fileEntryId])
+
+  const img = data?.fileEntry?.url
+
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
   const [rect, setRect] = useState<DOMRect | null>(null)
@@ -58,26 +68,6 @@ const Editor: React.FC = () => {
           height: 100%;
         `}
       >
-        {img === '' ? (
-          <input
-            type="file"
-            aria-label="editor_input"
-            accept="image/*"
-            css={css`
-              display: none;
-            `}
-            onChange={e => {
-              const file = e.target.files?.[0]
-              if (!file) return
-
-              const fileReader = new FileReader()
-              fileReader.addEventListener('load', event => {
-                setImg((event.target?.result as string) ?? null)
-              })
-              fileReader.readAsDataURL(file)
-            }}
-          />
-        ) : null}
         <div
           css={css`
             position: relative;
