@@ -1,18 +1,18 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import Editor from './Editor'
+import { configureStore } from '~/store'
+import { Provider } from 'react-redux'
 
 describe('<Editor />', () => {
   it('render without crash', () => {
-    render(<Editor />)
-    expect(true).toBe(true)
-  })
+    const store = configureStore()
 
-  it('check canvas loading', () => {
-    const { getByLabelText, getByAltText } = render(<Editor />)
-    const input = getByLabelText('editor_input')
-    fireEvent.change(input, { target: { value: '' } })
-    const image = getByAltText('Image not found')
-    expect(image).toBeInTheDocument
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    )
+    expect(true).toBe(true)
   })
 })
