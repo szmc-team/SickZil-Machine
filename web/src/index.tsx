@@ -8,11 +8,10 @@ import App from './features/app'
 import * as serviceWorker from './serviceWorker'
 import { GlobalStyle, ThemeProvider } from './styles'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from './stores/configureStores'
 import { configureClient } from './graphql'
+import { configureStore } from './store'
 
-const store = createStore(rootReducer)
+const store = configureStore()
 const client = configureClient()
 
 const Root: React.FC = () => (
