@@ -1,12 +1,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { FilePreview } from '../types'
 import { useDeleteFileEntryMutation, FileEntriesDocument } from '~/graphql'
-import { Subject } from 'rxjs'
+import { FilePreview } from '../types'
 
 interface ImageListItemProps extends FilePreview {}
-
-export const subject = new Subject<String>()
 
 const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
   const [deleteFileEntry] = useDeleteFileEntryMutation({
@@ -15,7 +12,7 @@ const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
   })
 
   return (
-    <li css={styles.item} onClick={() => subject.next(id)}>
+    <li css={styles.item}>
       <img src={img} css={styles.img} />
       <div>
         <span css={styles.name}>{name}</span>
