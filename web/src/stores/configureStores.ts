@@ -1,8 +1,12 @@
-import { combineReducers } from 'redux'
-import { globalReducer } from './modules/global'
+import { createStore } from 'redux'
+import { createEpicMiddleware } from 'redux-observable'
+import rootEpic from './rootEpic'
+import rootReducer from './rootReducer'
 
-const rootReducer = combineReducers({
-  global: globalReducer,
-})
+export function configureStore() {
+  const epicMiddleware = createEpicMiddleware()
+  const store = createStore(rootReducer)
+  epicMiddleware.run(rootEpic)
 
-export default rootReducer
+  return store
+}
