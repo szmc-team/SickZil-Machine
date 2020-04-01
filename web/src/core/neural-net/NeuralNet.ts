@@ -1,16 +1,19 @@
-import * as tf from '@tensorflow/tfjs'
+import {
+  Tensor3D,
+  loadLayersModel,
+  LayersModel,
+  Tensor,
+} from '@tensorflow/tfjs'
+import { readPng } from './nodeUtils'
+import { rgb } from './image'
 
-const tmp = async () => {
-  tf.ones([1, 2, 3]).print()
+let _snet: LayersModel | null = null
+const snet = async () =>
+  _snet ? _snet : await loadLayersModel('file://public/snet/model.json')
 
-  try {
-    const model = await tf.loadLayersModel('file://public/snet/model.json')
-
-    console.log(model)
-    console.log(typeof model)
-  } catch (err) {
-    console.log('failed:', err)
-  }
+export const genMask = async (image: Tensor3D): Promise<Tensor> => {
+  const model = await snet()
+  const img = rgb(image).expandDims()
+  const segmap = (await model.predict(img)) as Tensor
+  return segmap.squeeze([0]).round().cast('int32')
 }
-
-export default tmp
