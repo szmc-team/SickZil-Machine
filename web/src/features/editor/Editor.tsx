@@ -3,8 +3,6 @@ import { jsx, css } from '@emotion/core'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { drawLine, Position2D } from './draw'
 
-let timer: NodeJS.Timeout | null
-
 const Editor: React.FC = () => {
   const [img, setImg] = useState<string>('')
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
@@ -39,16 +37,11 @@ const Editor: React.FC = () => {
       e.persist()
       if (!rect) return
 
-      if (!timer) {
-        timer = setTimeout(() => {
-          timer = null
-          if (context && isDrawing) {
-            prev.current = curr.current
-            curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+      if (context && isDrawing) {
+        prev.current = curr.current
+        curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
 
-            drawLine(context, prev.current, curr.current)
-          }
-        }, 16)
+        drawLine(context, prev.current, curr.current)
       }
     },
     [context, rect, isDrawing]
