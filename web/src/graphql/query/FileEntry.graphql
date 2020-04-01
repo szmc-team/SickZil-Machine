@@ -3,5 +3,6 @@ query fileEntry($id: ID!) {
     id
     name
     blob
+    url
   }
 }
