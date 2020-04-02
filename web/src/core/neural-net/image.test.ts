@@ -1,10 +1,19 @@
 /**
  * @jest-environment node
  */
-import { Tensor, tensor3d, tensor2d } from '@tensorflow/tfjs'
+import { tensor3d, tensor2d } from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-node'
 import { mapColor, rgb } from './image'
-import { readPng, shallowEqual, tensorEqual } from './nodeUtils'
+import { tensorEqual } from './nodeUtils'
+import fs from 'fs'
+import { PNG } from 'pngjs'
+
+const readPng = (path: string) => {
+  const buf = fs.readFileSync(path)
+  const png = PNG.sync.read(buf)
+  const arr = new Int32Array(png.data)
+  return tensor3d(arr, [png.height, png.width, 4])
+}
 
 test('tensorEqual', () => {
   const inp = tensor3d([

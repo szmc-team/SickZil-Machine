@@ -7,7 +7,7 @@ import fs from 'fs'
 import { genMask } from './NeuralNet'
 import { PNG } from 'pngjs'
 
-export const readPng = (path: string) => {
+const readPng = (path: string) => {
   const buf = fs.readFileSync(path)
   return PNG.sync.read(buf)
 }
