@@ -4,7 +4,6 @@ import {
   loadLayersModel,
   tensor3d,
 } from '@tensorflow/tfjs'
-import tf from '@tensorflow/tfjs'
 import { rgb } from './image'
 
 let _snet: LayersModel | null = null
@@ -30,8 +29,13 @@ export const genMask = async (
 
   const inpTensor = tensor3d(image, [height, width, 4])
   const img = rgb(inpTensor).expandDims()
-  const segmap = (await model.predict(img)) as Tensor
-  const outTensor = segmap.squeeze([0]).round().mul(255).cast('int32')
+  const segmap = model.predict(img) as Tensor
+  const outArr = await segmap
+    .squeeze([0])
+    .round()
+    .mul(255)
+    .cast('int32')
+    .data()
 
-  return Int32Array.from(await outTensor.data())
+  return Int32Array.from(outArr)
 }

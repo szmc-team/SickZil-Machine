@@ -17,7 +17,7 @@ test('inference small 16x image', async () => {
   const inpArr = new Int32Array(png.data)
   const outArr = await genMask(inpArr, png.width, png.height)
 
-  const outTensor = tf.tensor(outArr, [png.height, png.width, 3])
-  const pngArr = await tf.node.encodePng(outTensor as tf.Tensor3D)
-  fs.writeFileSync('./src/mocks/chk.png', Buffer.from(pngArr), 'binary')
+  const outTensor = tf.tensor(outArr, [png.height, png.width, 3]) as tf.Tensor3D
+  const pngArr = await tf.node.encodePng(outTensor)
+  fs.writeFileSync('./output', Buffer.from(pngArr), 'binary')
 })
