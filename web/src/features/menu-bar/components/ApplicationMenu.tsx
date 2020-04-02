@@ -13,6 +13,7 @@ const ApplicationMenu: React.FC = () => {
       <label>
         <span css={styles.menuItem}>File</span>
         <input
+          data-cy="FileInput"
           type="file"
           accept="image/*"
           css={css`

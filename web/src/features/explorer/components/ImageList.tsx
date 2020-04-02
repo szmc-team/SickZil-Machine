@@ -2,7 +2,11 @@
 import { jsx, css } from '@emotion/core'
 
 const ImageList: React.FC = ({ children }) => {
-  return <ul css={styles.list}>{children}</ul>
+  return (
+    <ul data-cy="ImageList" css={styles.list}>
+      {children}
+    </ul>
+  )
 }
 
 const styles = {
