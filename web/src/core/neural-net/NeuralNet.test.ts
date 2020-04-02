@@ -4,7 +4,6 @@
 import '@tensorflow/tfjs-node'
 import * as tf from '@tensorflow/tfjs-node'
 import fs from 'fs'
-import { shallowEqual } from './nodeUtils'
 import { genMask } from './NeuralNet'
 import { PNG } from 'pngjs'
 

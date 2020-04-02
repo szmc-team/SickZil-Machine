@@ -1,6 +1,5 @@
 import {
   Tensor,
-  Tensor3D,
   LayersModel,
   loadLayersModel,
   tensor3d,
