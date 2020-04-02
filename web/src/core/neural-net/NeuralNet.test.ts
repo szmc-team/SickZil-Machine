@@ -4,12 +4,19 @@
 import '@tensorflow/tfjs-node'
 import * as tf from '@tensorflow/tfjs-node'
 import fs from 'fs'
-import { readPng, shallowEqual } from './nodeUtils'
+import { shallowEqual } from './nodeUtils'
 import { genMask } from './NeuralNet'
+import { PNG } from 'pngjs'
+
+export const readPng = (path: string) => {
+  const buf = fs.readFileSync(path)
+  return PNG.sync.read(buf)
+}
 
 test('inference small 16x image', async () => {
-  const inp = readPng('./src/mocks/small16x.png')
-  const out = (await genMask(inp)).mul(255)
+  const png = readPng('./src/mocks/small16x.png')
+  const inpArr = new Int32Array(png.data)
+  const out = await genMask(inpArr, png.width, png.height)
   const pngArr = await tf.node.encodePng(out as tf.Tensor3D)
-  fs.writeFileSync('chk.png', Buffer.from(pngArr), 'binary')
+  fs.writeFileSync('./src/mocks/chk.png', Buffer.from(pngArr), 'binary')
 })
