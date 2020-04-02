@@ -7,20 +7,26 @@ import { ApolloProvider } from '@apollo/client'
 import App from './features/app'
 import * as serviceWorker from './serviceWorker'
 import { GlobalStyle, ThemeProvider } from './styles'
+import { Provider } from 'react-redux'
 import { configureClient } from './graphql'
+import { configureStore } from './store'
 
+const store = configureStore()
 const client = configureClient()
+
 const Root: React.FC = () => (
-  <ApolloProvider client={client}>
-    <MemoryRouter>
-      <SnackbarProvider>
-        <ThemeProvider>
-          <GlobalStyle />
-          <App />
-        </ThemeProvider>
-      </SnackbarProvider>
-    </MemoryRouter>
-  </ApolloProvider>
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <MemoryRouter>
+        <SnackbarProvider>
+          <ThemeProvider>
+            <GlobalStyle />
+            <App />
+          </ThemeProvider>
+        </SnackbarProvider>
+      </MemoryRouter>
+    </ApolloProvider>
+  </Provider>
 )
 
 ReactDOM.render(<Root />, document.getElementById('root'))

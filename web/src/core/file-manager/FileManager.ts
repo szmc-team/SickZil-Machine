@@ -18,9 +18,10 @@ export class FileManager {
     const meta = await this.metaStorage.getItem<FileMetadata | null>(id)
     if (!arrayBuffer || !meta) return null
     const blob = arrayBufferToBlob(arrayBuffer)
+    const url = this.generateUrl(id, blob)
     const { name } = meta
 
-    return { id, name, blob }
+    return { id, name, blob, url }
   }
 
   async readAll() {
@@ -34,17 +35,32 @@ export class FileManager {
       keys.map(id => this.blobStorage.getItem<ArrayBuffer>(id))
     )
 
-    return metas.map((meta, idx) => ({
-      id: meta.id,
-      name: meta.name,
-      blob: arrayBufferToBlob(arrayBuffers[idx]),
-    }))
+    return metas.map(({ id, name }, idx) => {
+      const blob = arrayBufferToBlob(arrayBuffers[idx])
+      const url = this.generateUrl(id, blob)
+
+      return { id, name, blob, url }
+    })
   }
 
   async delete(id: string) {
     await this.blobStorage.removeItem(id)
     await this.metaStorage.removeItem(id)
+    this.flushUrlCache(id)
     return id
+  }
+
+  private generateUrl(id: string, blob: Blob) {
+    const cachedUrl = this.urlCache.get(id)
+    if (cachedUrl) return cachedUrl
+
+    const url = URL.createObjectURL(blob)
+    this.urlCache.set(id, url)
+    return url
+  }
+
+  private flushUrlCache(id: string) {
+    this.urlCache.delete(id)
   }
 
   private blobStorage = localforage.createInstance({
@@ -56,6 +72,8 @@ export class FileManager {
     name: 'meta',
     driver: localforage.LOCALSTORAGE,
   })
+
+  private urlCache = new Map<string, string>()
 }
 
 async function blobToArrayBuffer(blob: Blob) {
