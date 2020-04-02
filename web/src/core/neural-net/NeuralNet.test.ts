@@ -19,5 +19,5 @@ test('inference small 16x image', async () => {
 
   const outTensor = tf.tensor(outArr, [png.height, png.width, 3]) as tf.Tensor3D
   const pngArr = await tf.node.encodePng(outTensor)
-  fs.writeFileSync('./output', Buffer.from(pngArr), 'binary')
+  fs.writeFileSync('./output/check.png', Buffer.from(pngArr), 'binary')
 })
