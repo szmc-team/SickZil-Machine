@@ -3,7 +3,7 @@
  */
 import '@tensorflow/tfjs-node'
 import * as tf from '@tensorflow/tfjs-node'
-import fs from 'fs'
+import fs from 'fs-extra'
 import { genMask } from './NeuralNet'
 import { PNG } from 'pngjs'
 
@@ -19,5 +19,5 @@ test('inference small 16x image', async () => {
 
   const outTensor = tf.tensor(outArr, [png.height, png.width, 3]) as tf.Tensor3D
   const pngArr = await tf.node.encodePng(outTensor)
-  fs.writeFileSync('./output/check.png', Buffer.from(pngArr), 'binary')
+  fs.outputFileSync('./output/check.png', Buffer.from(pngArr), 'binary')
 })
