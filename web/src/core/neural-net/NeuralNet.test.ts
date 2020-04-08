@@ -7,17 +7,39 @@ import fs from 'fs-extra'
 import { genMask } from './NeuralNet'
 import { PNG } from 'pngjs'
 
-const readPng = (path: string) => {
-  const buf = fs.readFileSync(path)
-  return PNG.sync.read(buf)
+const FileToMask = async (
+  inpPath: string
+): Promise<[Int32Array, number, number]> => {
+  const buf = fs.readFileSync(inpPath)
+  const { data, height: h, width: w } = PNG.sync.read(buf)
+  return [await genMask(new Int32Array(data), h, w), h, w]
 }
 
-test('inference small 16x image', async () => {
-  const png = readPng('./src/mocks/small16x.png')
-  const inpArr = new Int32Array(png.data)
-  const outArr = await genMask(inpArr, png.width, png.height)
-
-  const outTensor = tf.tensor(outArr, [png.height, png.width, 3]) as tf.Tensor3D
+const maskToFile = async (
+  maskArr: Int32Array,
+  h: number,
+  w: number,
+  outPath: string
+): Promise<Uint8Array> => {
+  const outTensor = tf.tensor(maskArr, [h, w, 3]) as tf.Tensor3D
   const pngArr = await tf.node.encodePng(outTensor)
-  fs.outputFileSync('./output/check.png', Buffer.from(pngArr), 'binary')
+  fs.outputFileSync(outPath, Buffer.from(pngArr), 'binary')
+  return pngArr
+}
+
+describe('nn.maskGen', () => {
+  it('can inference tiny 16x image', async () => {
+    const [maskArr, h, w] = await FileToMask('./src/mocks/tiny16x.png')
+    maskToFile(maskArr, h, w, './output/tiny16x.png')
+  })
+
+  it('can inference 16x image', async () => {
+    const [maskArr, h, w] = await FileToMask('./src/mocks/middle16x.png')
+    maskToFile(maskArr, h, w, './output/middle16x.png')
+  })
+
+  it('can inference unpadded image', async () => {
+    const [maskArr, h, w] = await FileToMask('./src/mocks/middle.png')
+    maskToFile(maskArr, h, w, './output/middle.png')
+  })
 })
