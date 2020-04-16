@@ -4,6 +4,9 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { drawLine, Position2D } from './draw'
 import { useEditorState } from '~/store/modules/editor'
 import { useFileEntryQuery, useFileEntryLazyQuery } from '~/graphql'
+import Konva from 'konva'
+import { Stage, Layer } from 'react-konva'
+import { KonvaEventObject } from 'konva/types/Node'
 
 const Editor: React.FC = () => {
   const { fileEntryId } = useEditorState()
@@ -32,12 +35,23 @@ const Editor: React.FC = () => {
   }, [img])
 
   const startDrawing = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-      if (e.button || !rect) return
-      setIsDrawing(true)
-      const { clientX, clientY } = e
-      prev.current = { x: clientX - rect.left, y: clientY - rect.top }
-      curr.current = { x: clientX - rect.left, y: clientY - rect.top }
+    (e: KonvaEventObject<MouseEvent>) => {
+      // if (e.button || !rect) return
+      // setIsDrawing(true)
+      // const { clientX, clientY } = e
+      // prev.current = { x: clientX - rect.left, y: clientY - rect.top }
+      // curr.current = { x: clientX - rect.left, y: clientY - rect.top }
+      const stage = e.target.getStage()
+      if (!stage) return
+      const pos = stage.getPointerPosition()
+      if (!pos) return
+      const lastLine = new Konva.Line({
+        stroke: 'red',
+        strokeWidth: 5,
+        globalCompositeOperation: 'source-over',
+        points: [pos.x, pos.y],
+      })
+      e.currentTarget.getLayer()?.add(lastLine)
     },
     [rect]
   )
@@ -68,41 +82,13 @@ const Editor: React.FC = () => {
           height: 100%;
         `}
       >
-        <div
-          css={css`
-            position: relative;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-          `}
+        <Stage
+          onMouseDown={startDrawing}
+          width={window.innerWidth}
+          height={window.innerHeight}
         >
-          <img
-            css={css`
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-              position: absolute;
-              z-index: 1;
-            `}
-            src={img}
-            ref={imageRef}
-            alt="Image not found"
-          />
-          {img === '' ? null : (
-            <canvas
-              css={css`
-                position: absolute;
-                z-index: 2;
-              `}
-              ref={canvasRef}
-              onMouseDown={startDrawing}
-              onMouseMove={draw}
-              onMouseUp={stopDrawing}
-              width={imageRef.current?.width ?? 0}
-              height={imageRef.current?.height ?? 0}
-            />
-          )}
-        </div>
+          <Layer></Layer>
+        </Stage>
       </label>
     </div>
   )
