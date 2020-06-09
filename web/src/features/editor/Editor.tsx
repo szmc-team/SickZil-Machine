@@ -5,8 +5,9 @@ import { drawLine, Position2D } from './draw'
 import { useEditorState } from '~/store/modules/editor'
 import { useFileEntryQuery, useFileEntryLazyQuery } from '~/graphql'
 import Konva from 'konva'
-import { Stage, Layer } from 'react-konva'
+import { Stage, Layer, Image } from 'react-konva'
 import { KonvaEventObject } from 'konva/types/Node'
+import useImage from 'use-image'
 
 const Editor: React.FC = () => {
   const { fileEntryId } = useEditorState()
@@ -17,6 +18,7 @@ const Editor: React.FC = () => {
   }, [loadFileEntry, fileEntryId])
 
   const img = data?.fileEntry?.url
+  const [image] = useImage(img || '')
 
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
@@ -25,7 +27,7 @@ const Editor: React.FC = () => {
   const prev = useRef<Position2D>({ x: 0, y: 0 })
   const curr = useRef<Position2D>({ x: 0, y: 0 })
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const imageRef = useRef<HTMLImageElement>(null)
+  const layerRef = useRef<Konva.Layer>(null)
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -36,11 +38,6 @@ const Editor: React.FC = () => {
 
   const startDrawing = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
-      // if (e.button || !rect) return
-      // setIsDrawing(true)
-      // const { clientX, clientY } = e
-      // prev.current = { x: clientX - rect.left, y: clientY - rect.top }
-      // curr.current = { x: clientX - rect.left, y: clientY - rect.top }
       const stage = e.target.getStage()
       if (!stage) return
       const pos = stage.getPointerPosition()
@@ -51,19 +48,18 @@ const Editor: React.FC = () => {
         globalCompositeOperation: 'source-over',
         points: [pos.x, pos.y],
       })
-      e.currentTarget.getLayer()?.add(lastLine)
+      layerRef.current?.add(lastLine)
+      // e.currentTarget.getLayer()?.add(lastLine)
     },
     [rect]
   )
 
   const draw = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-      e.persist()
+    (e: KonvaEventObject<MouseEvent>) => {
       if (!rect) return
-
       if (context && isDrawing) {
         prev.current = curr.current
-        curr.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+        curr.current = { ...e.target.getStage()?.getPointerPosition() }
 
         drawLine(context, prev.current, curr.current)
       }
@@ -84,10 +80,14 @@ const Editor: React.FC = () => {
       >
         <Stage
           onMouseDown={startDrawing}
+          onMouseMove={draw}
           width={window.innerWidth}
           height={window.innerHeight}
         >
-          <Layer></Layer>
+          <Layer>
+            <Image image={image} />
+          </Layer>
+          <Layer ref={layerRef} />
         </Stage>
       </label>
     </div>
