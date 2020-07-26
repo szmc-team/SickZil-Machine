@@ -97,6 +97,7 @@ const Editor: React.FC = () => {
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
+            onMouseLeave={stopDrawing}
             width={dimension.width}
             height={dimension.height}
             ref={stageRef}
