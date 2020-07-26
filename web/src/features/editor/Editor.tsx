@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Position2D } from './draw'
 import { useEditorState } from '~/store/modules/editor'
 import { useFileEntryQuery, useFileEntryLazyQuery } from '~/graphql'
 import Konva from 'konva'
@@ -9,9 +8,10 @@ import { Stage, Layer, Image } from 'react-konva'
 import { KonvaEventObject } from 'konva/types/Node'
 import useImage from 'use-image'
 import { Line } from 'konva/types/shapes/Line'
+import { Dimension } from './types'
 
 const Editor: React.FC = () => {
-  const { fileEntryId } = useEditorState()
+  const { fileEntryId, mode } = useEditorState()
   const [loadFileEntry, { data }] = useFileEntryLazyQuery()
 
   useEffect(() => {
@@ -20,28 +20,24 @@ const Editor: React.FC = () => {
 
   const img = data?.fileEntry?.url
   const [image] = useImage(img || '')
-
-  const [dimension, setDemension] = useState<{ width: number; height: number }>(
-    { width: image?.height || 0, height: image?.height || 0 }
-  )
-
-  console.log(image)
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
-  const [isDrawing, setIsDrawing] = useState<boolean>(false)
-  const [rect, setRect] = useState<DOMRect | null>(null)
-
-  const lastLine = useRef<Line>()
-
-  const stageRef = useRef<Stage>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const layerRef = useRef<Konva.Layer>(null)
+  const [dimension, setDimension] = useState<Dimension>({
+    width: image?.width || 0,
+    height: image?.height || 0,
+  })
 
   useEffect(() => {
-    if (!canvasRef.current) return
+    if (!image) return
+    setDimension({
+      width: image.width,
+      height: image.height,
+    })
+  }, [image])
 
-    setRect(canvasRef.current.getBoundingClientRect())
-    setContext(canvasRef.current.getContext('2d'))
-  }, [img])
+  const [isDrawing, setIsDrawing] = useState<boolean>(false)
+
+  const lastLine = useRef<Line>()
+  const stageRef = useRef<Stage>(null)
+  const layerRef = useRef<Konva.Layer>(null)
 
   const startDrawing = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
@@ -53,12 +49,13 @@ const Editor: React.FC = () => {
       lastLine.current = new Konva.Line({
         stroke: 'red',
         strokeWidth: 5,
-        globalCompositeOperation: 'source-over',
+        globalCompositeOperation:
+          mode === 'draw' ? 'source-over' : 'destination-out',
         points: [pos.x, pos.y],
       })
       layerRef.current.add(lastLine.current)
     },
-    [rect]
+    [stageRef, layerRef, mode]
   )
 
   const draw = useCallback(
@@ -72,7 +69,7 @@ const Editor: React.FC = () => {
       lastLine.current.points(newPoints)
       layerRef.current?.batchDraw()
     },
-    [context, rect, isDrawing]
+    [isDrawing]
   )
 
   const stopDrawing = useCallback(() => setIsDrawing(false), [])
@@ -86,19 +83,30 @@ const Editor: React.FC = () => {
           height: 100%;
         `}
       >
-        <Stage
-          onMouseDown={startDrawing}
-          onMouseMove={draw}
-          onMouseUp={stopDrawing}
-          width={window.innerWidth}
-          height={window.innerHeight}
-          ref={stageRef}
+        <div
+          css={css`
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            align-items: center;
+            overflow: auto;
+          `}
         >
-          <Layer x={123}>
-            <Image image={image} />
-          </Layer>
-          <Layer ref={layerRef} />
-        </Stage>
+          <Stage
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            width={dimension.width}
+            height={dimension.height}
+            ref={stageRef}
+          >
+            <Layer>
+              <Image image={image} />
+            </Layer>
+            <Layer ref={layerRef} />
+          </Stage>
+        </div>
       </label>
     </div>
   )
