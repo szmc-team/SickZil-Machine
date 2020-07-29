@@ -19,7 +19,7 @@ const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
       css={styles.item}
       onClick={() => editor.selectFile(id)}
     >
-      <img src={img} css={styles.img} />
+      <img src={img} css={styles.img} alt="" />
       <div>
         <span css={styles.name}>{name}</span>
         <button

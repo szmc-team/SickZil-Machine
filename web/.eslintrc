@@ -3,12 +3,13 @@
   "rules": {
     "semi": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "import/extensions": ["never"]
+    "import/extensions": ["never"],
+    "no-unused-vars": ["never"]
   },
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
-    }, 
+    },
     "import/resolver": {
       "typescript": {
         "alwaysTryTypes": true
