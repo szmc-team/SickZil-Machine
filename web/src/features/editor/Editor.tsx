@@ -2,7 +2,7 @@
 import { jsx, css } from '@emotion/core'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useEditorState } from '~/store/modules/editor'
-import { useFileEntryQuery, useFileEntryLazyQuery } from '~/graphql'
+import { useFileEntryLazyQuery } from '~/graphql'
 import Konva from 'konva'
 import { Stage, Layer, Image } from 'react-konva'
 import { KonvaEventObject } from 'konva/types/Node'
