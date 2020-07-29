@@ -14,11 +14,16 @@ const ImageListItem: React.FC<ImageListItemProps> = ({ id, img, name }) => {
   })
 
   return (
-    <li css={styles.item} onClick={() => editor.selectFile(id)}>
+    <li
+      data-cy="ImageListItem"
+      css={styles.item}
+      onClick={() => editor.selectFile(id)}
+    >
       <img src={img} css={styles.img} alt="" />
       <div>
         <span css={styles.name}>{name}</span>
         <button
+          data-cy="ImageListItem__deleteButton"
           onClick={() => deleteFileEntry({ variables: { input: { id } } })}
         >
           DELETE
