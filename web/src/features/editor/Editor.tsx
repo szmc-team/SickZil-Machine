@@ -9,6 +9,7 @@ import { KonvaEventObject } from 'konva/types/Node'
 import useImage from 'use-image'
 import { Line } from 'konva/types/shapes/Line'
 import { Dimension } from './types'
+import { Vector2d } from 'konva/types/types'
 
 const Editor: React.FC = () => {
   const { fileEntryId, mode } = useEditorState()
@@ -34,6 +35,7 @@ const Editor: React.FC = () => {
   }, [image])
 
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
+  const [scale, setScale] = useState<Vector2d>({ x: 1, y: 1 })
 
   const lastLine = useRef<Line>()
   const stageRef = useRef<Stage>(null)
@@ -46,16 +48,23 @@ const Editor: React.FC = () => {
       const pos = stageRef.current.getStage().getPointerPosition()
       if (!pos) return
 
+      console.log('pos', pos)
+      console.log('scale', scale)
+      console.log('pos with unscale', {
+        x: pos.x / scale.x,
+        y: pos.y / scale.y,
+      })
+
       lastLine.current = new Konva.Line({
         stroke: 'red',
         strokeWidth: 5,
         globalCompositeOperation:
           mode === 'draw' ? 'source-over' : 'destination-out',
-        points: [pos.x, pos.y],
+        points: [pos.x / scale.x, pos.y / scale.y],
       })
       layerRef.current.add(lastLine.current)
     },
-    [stageRef, layerRef, mode]
+    [stageRef, layerRef, mode, scale]
   )
 
   const draw = useCallback(
@@ -65,14 +74,29 @@ const Editor: React.FC = () => {
       const pos = stageRef.current?.getStage().getPointerPosition()
       if (!pos) return
 
-      const newPoints = lastLine.current.points().concat([pos.x, pos.y])
+      const newPoints = lastLine.current
+        .points()
+        .concat([pos.x / scale.x, pos.y / scale.y])
       lastLine.current.points(newPoints)
       layerRef.current?.batchDraw()
     },
-    [isDrawing]
+    [isDrawing, scale]
   )
 
   const stopDrawing = useCallback(() => setIsDrawing(false), [])
+
+  function zoom(e: KonvaEventObject<WheelEvent>) {
+    if (!e.evt.ctrlKey) return
+
+    e.evt.preventDefault()
+    const isZoomOut = e.evt.deltaY > 0
+    setScale(vec => {
+      console.log(vec)
+      return isZoomOut
+        ? { x: vec.x - 0.2, y: vec.y - 0.2 }
+        : { x: vec.x + 0.2, y: vec.y + 0.2 }
+    })
+  }
 
   return (
     <div css={styles.editor}>
@@ -98,14 +122,15 @@ const Editor: React.FC = () => {
             onMouseMove={draw}
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
-            width={dimension.width}
-            height={dimension.height}
+            onWheel={zoom}
+            width={dimension.width * scale.x}
+            height={dimension.height * scale.y}
             ref={stageRef}
           >
             <Layer>
-              <Image image={image} />
+              <Image image={image} scale={scale} />
             </Layer>
-            <Layer ref={layerRef} />
+            <Layer ref={layerRef} scale={scale} />
           </Stage>
         </div>
       </label>
