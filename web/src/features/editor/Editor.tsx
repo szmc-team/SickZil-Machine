@@ -48,13 +48,6 @@ const Editor: React.FC = () => {
       const pos = stageRef.current.getStage().getPointerPosition()
       if (!pos) return
 
-      console.log('pos', pos)
-      console.log('scale', scale)
-      console.log('pos with unscale', {
-        x: pos.x / scale.x,
-        y: pos.y / scale.y,
-      })
-
       lastLine.current = new Konva.Line({
         stroke: 'red',
         strokeWidth: 5,
@@ -79,50 +72,39 @@ const Editor: React.FC = () => {
         .concat([pos.x / scale.x, pos.y / scale.y])
       lastLine.current.points(newPoints)
       layerRef.current?.batchDraw()
+      console.log(newPoints)
     },
     [isDrawing, scale]
   )
 
   const stopDrawing = useCallback(() => setIsDrawing(false), [])
 
-  function zoom(e: KonvaEventObject<WheelEvent>) {
-    if (!e.evt.ctrlKey) return
+  function zoom(e: WheelEvent) {
+    if (!e.ctrlKey) return
 
-    e.evt.preventDefault()
-    const isZoomOut = e.evt.deltaY > 0
+    e.preventDefault()
+
+    const isZoomOut = e.deltaY > 0
+
+    if (isZoomOut && scale.x < 0.2) return
+
     setScale(vec => {
-      console.log(vec)
       return isZoomOut
-        ? { x: vec.x - 0.2, y: vec.y - 0.2 }
-        : { x: vec.x + 0.2, y: vec.y + 0.2 }
+        ? { x: vec.x - 0.1, y: vec.y - 0.1 }
+        : { x: vec.x + 0.1, y: vec.y + 0.1 }
     })
   }
 
   return (
     <div css={styles.editor}>
-      <label
-        css={css`
-          display: block;
-          width: 100%;
-          height: 100%;
-        `}
-      >
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-            align-items: center;
-            overflow: auto;
-          `}
-        >
+      <label css={styles.label}>
+        <div css={styles.stage}>
           <Stage
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
-            onWheel={zoom}
+            onWheel={e => zoom(e.evt)}
             width={dimension.width * scale.x}
             height={dimension.height * scale.y}
             ref={stageRef}
@@ -138,6 +120,15 @@ const Editor: React.FC = () => {
   )
 }
 const styles = {
+  label: css`
+    display: block;
+    width: 100%;
+    height: 100%;
+  `,
+  stage: css`
+    height: 100%;
+    overflow: auto;
+  `,
   editor: css`
     width: 100%;
     background-color: black;
