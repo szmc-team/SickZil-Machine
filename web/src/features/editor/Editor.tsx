@@ -9,6 +9,7 @@ import { KonvaEventObject } from 'konva/types/Node'
 import useImage from 'use-image'
 import { Line } from 'konva/types/shapes/Line'
 import { Dimension } from './types'
+import { Vector2d } from 'konva/types/types'
 
 const Editor: React.FC = () => {
   const { fileEntryId, mode } = useEditorState()
@@ -34,6 +35,7 @@ const Editor: React.FC = () => {
   }, [image])
 
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
+  const [scale, setScale] = useState<Vector2d>({ x: 1, y: 1 })
 
   const lastLine = useRef<Line>()
   const stageRef = useRef<Stage>(null)
@@ -51,11 +53,11 @@ const Editor: React.FC = () => {
         strokeWidth: 5,
         globalCompositeOperation:
           mode === 'draw' ? 'source-over' : 'destination-out',
-        points: [pos.x, pos.y],
+        points: [pos.x / scale.x, pos.y / scale.y],
       })
       layerRef.current.add(lastLine.current)
     },
-    [stageRef, layerRef, mode]
+    [stageRef, layerRef, mode, scale]
   )
 
   const draw = useCallback(
@@ -65,47 +67,52 @@ const Editor: React.FC = () => {
       const pos = stageRef.current?.getStage().getPointerPosition()
       if (!pos) return
 
-      const newPoints = lastLine.current.points().concat([pos.x, pos.y])
+      const newPoints = lastLine.current
+        .points()
+        .concat([pos.x / scale.x, pos.y / scale.y])
       lastLine.current.points(newPoints)
       layerRef.current?.batchDraw()
+      console.log(newPoints)
     },
-    [isDrawing]
+    [isDrawing, scale]
   )
 
   const stopDrawing = useCallback(() => setIsDrawing(false), [])
 
+  function zoom(e: WheelEvent) {
+    if (!e.ctrlKey) return
+
+    e.preventDefault()
+
+    const isZoomOut = e.deltaY > 0
+
+    if (isZoomOut && scale.x < 0.2) return
+
+    setScale(vec => {
+      return isZoomOut
+        ? { x: vec.x - 0.1, y: vec.y - 0.1 }
+        : { x: vec.x + 0.1, y: vec.y + 0.1 }
+    })
+  }
+
   return (
     <div css={styles.editor}>
-      <label
-        css={css`
-          display: block;
-          width: 100%;
-          height: 100%;
-        `}
-      >
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-            align-items: center;
-            overflow: auto;
-          `}
-        >
+      <label css={styles.label}>
+        <div css={styles.stage}>
           <Stage
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
-            width={dimension.width}
-            height={dimension.height}
+            onWheel={e => zoom(e.evt)}
+            width={dimension.width * scale.x}
+            height={dimension.height * scale.y}
             ref={stageRef}
           >
             <Layer>
-              <Image image={image} />
+              <Image image={image} scale={scale} />
             </Layer>
-            <Layer ref={layerRef} />
+            <Layer ref={layerRef} scale={scale} />
           </Stage>
         </div>
       </label>
@@ -113,6 +120,15 @@ const Editor: React.FC = () => {
   )
 }
 const styles = {
+  label: css`
+    display: block;
+    width: 100%;
+    height: 100%;
+  `,
+  stage: css`
+    height: 100%;
+    overflow: auto;
+  `,
   editor: css`
     width: 100%;
     background-color: black;
