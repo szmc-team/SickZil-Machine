@@ -10,14 +10,23 @@ import useImage from 'use-image'
 import { Line } from 'konva/types/shapes/Line'
 import { Dimension } from './types'
 import { Vector2d } from 'konva/types/types'
+import { useHistory, useHistoryState } from '~/store/modules/history'
 
 const Editor: React.FC = () => {
   const { fileEntryId, mode } = useEditorState()
+  const { draw: recordDrawing, initialize } = useHistory()
   const [loadFileEntry, { data }] = useFileEntryLazyQuery()
+  const history = useHistoryState(fileEntryId)
 
   useEffect(() => {
-    if (fileEntryId) loadFileEntry({ variables: { id: fileEntryId } })
-  }, [loadFileEntry, fileEntryId])
+    if (!fileEntryId) return
+    loadFileEntry({ variables: { id: fileEntryId } })
+    if (!history) initialize(fileEntryId)
+  }, [loadFileEntry, fileEntryId, initialize])
+
+  useEffect(() => {
+    console.log(history)
+  }, [history])
 
   const img = data?.fileEntry?.url
   const [image] = useImage(img || '')
@@ -72,12 +81,20 @@ const Editor: React.FC = () => {
         .concat([pos.x / scale.x, pos.y / scale.y])
       lastLine.current.points(newPoints)
       layerRef.current?.batchDraw()
-      console.log(newPoints)
     },
     [isDrawing, scale]
   )
 
-  const stopDrawing = useCallback(() => setIsDrawing(false), [])
+  const stopDrawing = useCallback(
+    (e: KonvaEventObject<MouseEvent>) => {
+      setIsDrawing(false)
+
+      if (fileEntryId && e.evt.type === 'mouseup') {
+        recordDrawing(fileEntryId, layerRef.current?.toDataURL({})!)
+      }
+    },
+    [fileEntryId]
+  )
 
   function zoom(e: WheelEvent) {
     if (!e.ctrlKey) return
