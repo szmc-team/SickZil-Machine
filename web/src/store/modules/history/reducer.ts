@@ -16,6 +16,7 @@ export const historyReducer = createReducer<HistoryState, HistoryActions>(
   .handleAction(initializeImage, (state, { payload: { fileEntryId } }) =>
     produce(state, draft => {
       draft[fileEntryId] = {
+        lastAction: 'initialize',
         past: [],
         present: null,
         future: [],
@@ -29,6 +30,7 @@ export const historyReducer = createReducer<HistoryState, HistoryActions>(
 
       fileHistoryObject.future.unshift(fileHistoryObject.present)
       fileHistoryObject.present = fileHistoryObject.past.pop() || null
+      fileHistoryObject.lastAction = 'undo'
     })
   )
   .handleAction(redo, (state, { payload: { fileEntryId } }) =>
@@ -39,6 +41,7 @@ export const historyReducer = createReducer<HistoryState, HistoryActions>(
       if (fileHistoryObject.present)
         fileHistoryObject.past.push(fileHistoryObject.present)
       fileHistoryObject.present = fileHistoryObject.future.shift()!
+      fileHistoryObject.lastAction = 'redo'
     })
   )
   .handleAction(record, (state, { payload: { fileEntryId, data, type } }) =>
@@ -52,5 +55,6 @@ export const historyReducer = createReducer<HistoryState, HistoryActions>(
         type,
         data,
       }
+      fileHistoryObject.lastAction = 'record'
     })
   )

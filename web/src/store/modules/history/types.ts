@@ -6,6 +6,7 @@ type HistoryData = {
 }
 
 export type HistoryObject = {
+  lastAction: 'undo' | 'redo' | 'record' | 'initialize' | 'none'
   past: HistoryData[]
   present: HistoryData | null
   future: HistoryData[]
