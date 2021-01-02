@@ -22,7 +22,7 @@ const Editor: React.FC = () => {
     if (!fileEntryId) return
     loadFileEntry({ variables: { id: fileEntryId } })
     if (!history) initialize(fileEntryId)
-  }, [loadFileEntry, fileEntryId, initialize])
+  }, [loadFileEntry, fileEntryId, initialize, history])
 
   useEffect(() => {
     console.log(history)
@@ -93,7 +93,7 @@ const Editor: React.FC = () => {
         recordDrawing(fileEntryId, layerRef.current?.toDataURL({})!)
       }
     },
-    [fileEntryId]
+    [fileEntryId, recordDrawing]
   )
 
   function zoom(e: WheelEvent) {
