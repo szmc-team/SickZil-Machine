@@ -51,6 +51,8 @@ export const historyReducer = createReducer<HistoryState, HistoryActions>(
       if (fileHistoryObject.present)
         fileHistoryObject.past.push(fileHistoryObject.present)
 
+      fileHistoryObject.future = []
+
       fileHistoryObject.present = {
         type,
         data,
