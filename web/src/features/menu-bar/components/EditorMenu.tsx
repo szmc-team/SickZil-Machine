@@ -3,12 +3,13 @@ import { jsx, css } from '@emotion/core'
 import { MdBrush, MdUndo, MdRedo, MdTranslate } from 'react-icons/md'
 import { FaEraser } from 'react-icons/fa'
 import { useEditor, useEditorState } from '~/store/modules/editor'
-import { useHistory } from '~/store/modules/history'
+import { useHistory, useHistoryState } from '~/store/modules/history'
 
 const EditorMenu: React.FC = () => {
   const editor = useEditor()
   const { fileEntryId } = useEditorState()
   const history = useHistory()
+  const historyState = useHistoryState(fileEntryId)
 
   return (
     <div css={styles.editorMenu}>
@@ -24,14 +25,20 @@ const EditorMenu: React.FC = () => {
       />
       <MdTranslate css={styles.icon} size={24} />
       <MdUndo
-        css={styles.icon}
+        css={[
+          styles.icon,
+          ...(!historyState?.past.length ? [styles.disabled] : []),
+        ]}
         size={24}
         onClick={() => {
           if (fileEntryId) history.undo(fileEntryId)
         }}
       />
       <MdRedo
-        css={styles.icon}
+        css={[
+          styles.icon,
+          ...(!historyState?.future.length ? [styles.disabled] : []),
+        ]}
         size={24}
         onClick={() => {
           if (fileEntryId) history.redo(fileEntryId)
@@ -54,6 +61,9 @@ const styles = {
     &:hover {
       color: white;
     }
+  `,
+  disabled: css`
+    pointer-events: none;
   `,
 }
 
