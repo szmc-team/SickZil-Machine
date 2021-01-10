@@ -10,14 +10,60 @@ import useImage from 'use-image'
 import { Line } from 'konva/types/shapes/Line'
 import { Dimension } from './types'
 import { Vector2d } from 'konva/types/types'
+import { useHistory, useHistoryState } from '~/store/modules/history'
 
 const Editor: React.FC = () => {
   const { fileEntryId, mode } = useEditorState()
+  const { draw: recordDrawing, initialize } = useHistory()
   const [loadFileEntry, { data }] = useFileEntryLazyQuery()
+  const history = useHistoryState(fileEntryId)
 
   useEffect(() => {
-    if (fileEntryId) loadFileEntry({ variables: { id: fileEntryId } })
-  }, [loadFileEntry, fileEntryId])
+    if (!fileEntryId) return
+    loadFileEntry({ variables: { id: fileEntryId } })
+    if (!history) initialize(fileEntryId)
+  }, [loadFileEntry, fileEntryId, initialize, history])
+
+  const [scale, setScale] = useState<Vector2d>({ x: 1, y: 1 })
+
+  useEffect(() => {
+    if (
+      !history ||
+      history.lastAction === 'record' ||
+      history.lastAction === 'initialize'
+    )
+      return
+
+    const pastLines = history.past.map(
+      ({ data }) =>
+        new Konva.Line({
+          points: data.points,
+          strokeWidth: data.strokeWidth,
+          stroke: data.stroke,
+        })
+    )
+
+    layerRef.current?.destroyChildren()
+    if (pastLines.length) {
+      layerRef.current?.add(...pastLines)
+    }
+
+    if (!history.present) {
+      layerRef.current?.batchDraw()
+      return
+    }
+
+    const present = history.present.data
+
+    const line = new Konva.Line({
+      points: present.points,
+      stroke: present.stroke,
+      strokeWidth: present.strokeWidth,
+    })
+
+    layerRef.current?.add(line)
+    layerRef.current?.batchDraw()
+  }, [history])
 
   const img = data?.fileEntry?.url
   const [image] = useImage(img || '')
@@ -35,7 +81,6 @@ const Editor: React.FC = () => {
   }, [image])
 
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
-  const [scale, setScale] = useState<Vector2d>({ x: 1, y: 1 })
 
   const lastLine = useRef<Line>()
   const stageRef = useRef<Stage>(null)
@@ -72,12 +117,24 @@ const Editor: React.FC = () => {
         .concat([pos.x / scale.x, pos.y / scale.y])
       lastLine.current.points(newPoints)
       layerRef.current?.batchDraw()
-      console.log(newPoints)
     },
     [isDrawing, scale]
   )
 
-  const stopDrawing = useCallback(() => setIsDrawing(false), [])
+  const stopDrawing = useCallback(
+    (e: KonvaEventObject<MouseEvent>) => {
+      if (!fileEntryId) return
+
+      if (
+        e.evt.type === 'mouseup' ||
+        (e.evt.type === 'mouseout' && e.evt.buttons === 1)
+      ) {
+        recordDrawing(fileEntryId, lastLine.current?.toObject().attrs)
+      }
+      setIsDrawing(false)
+    },
+    [fileEntryId, recordDrawing]
+  )
 
   function zoom(e: WheelEvent) {
     if (!e.ctrlKey) return
