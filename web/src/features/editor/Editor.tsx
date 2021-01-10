@@ -123,11 +123,15 @@ const Editor: React.FC = () => {
 
   const stopDrawing = useCallback(
     (e: KonvaEventObject<MouseEvent>) => {
-      setIsDrawing(false)
+      if (!fileEntryId) return
 
-      if (fileEntryId && e.evt.type === 'mouseup') {
+      if (
+        e.evt.type === 'mouseup' ||
+        (e.evt.type === 'mouseout' && e.evt.buttons === 1)
+      ) {
         recordDrawing(fileEntryId, lastLine.current?.toObject().attrs)
       }
+      setIsDrawing(false)
     },
     [fileEntryId, recordDrawing]
   )
