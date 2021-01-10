@@ -14,7 +14,11 @@ export const redo = createAction('history/REDO_HISTORY')<RedoHistoryParams>()
 
 type RecordHistoryParams = {
   fileEntryId: string
-  data: string
+  data: {
+    points: number[]
+    stroke: string
+    strokeWidth: number
+  }
   type: HistoryType
 }
 export const record = createAction('history/RECORD_HISTORY')<

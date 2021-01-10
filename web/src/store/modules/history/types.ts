@@ -1,12 +1,18 @@
 export type HistoryType = 'draw'
 
+export type Action = 'undo' | 'redo' | 'record' | 'initialize' | 'none'
+
 type HistoryData = {
   type: HistoryType
-  data: string
+  data: {
+    points: number[]
+    stroke: string
+    strokeWidth: number
+  }
 }
 
 export type HistoryObject = {
-  lastAction: 'undo' | 'redo' | 'record' | 'initialize' | 'none'
+  lastAction: Action
   past: HistoryData[]
   present: HistoryData | null
   future: HistoryData[]

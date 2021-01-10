@@ -24,8 +24,45 @@ const Editor: React.FC = () => {
     if (!history) initialize(fileEntryId)
   }, [loadFileEntry, fileEntryId, initialize, history])
 
+  const [scale, setScale] = useState<Vector2d>({ x: 1, y: 1 })
+
   useEffect(() => {
-    console.log(history)
+    if (
+      !history ||
+      history.lastAction === 'record' ||
+      history.lastAction === 'initialize'
+    )
+      return
+
+    const pastLines = history.past.map(
+      ({ data }) =>
+        new Konva.Line({
+          points: data.points,
+          strokeWidth: data.strokeWidth,
+          stroke: data.stroke,
+        })
+    )
+
+    layerRef.current?.destroyChildren()
+    if (pastLines.length) {
+      layerRef.current?.add(...pastLines)
+    }
+
+    if (!history.present) {
+      layerRef.current?.batchDraw()
+      return
+    }
+
+    const present = history.present.data
+
+    const line = new Konva.Line({
+      points: present.points,
+      stroke: present.stroke,
+      strokeWidth: present.strokeWidth,
+    })
+
+    layerRef.current?.add(line)
+    layerRef.current?.batchDraw()
   }, [history])
 
   const img = data?.fileEntry?.url
@@ -44,7 +81,6 @@ const Editor: React.FC = () => {
   }, [image])
 
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
-  const [scale, setScale] = useState<Vector2d>({ x: 1, y: 1 })
 
   const lastLine = useRef<Line>()
   const stageRef = useRef<Stage>(null)
@@ -90,7 +126,7 @@ const Editor: React.FC = () => {
       setIsDrawing(false)
 
       if (fileEntryId && e.evt.type === 'mouseup') {
-        recordDrawing(fileEntryId, layerRef.current?.toDataURL({})!)
+        recordDrawing(fileEntryId, lastLine.current?.toObject().attrs)
       }
     },
     [fileEntryId, recordDrawing]

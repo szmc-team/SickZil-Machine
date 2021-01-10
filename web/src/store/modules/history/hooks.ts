@@ -17,7 +17,10 @@ export function useHistory() {
   )
 
   const draw = useCallback(
-    (fileEntryId: string, data: string) =>
+    (
+      fileEntryId: string,
+      data: { points: number[]; stroke: string; strokeWidth: number }
+    ) =>
       dispatch(
         historyActions.record({
           fileEntryId,
